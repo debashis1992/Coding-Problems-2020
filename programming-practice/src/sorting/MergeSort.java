@@ -5,7 +5,8 @@ import java.util.Arrays;
 public class MergeSort {
     public static void main(String[] args) {
         int[] a = {12,11,13,5,6};
-        performRecursiveMergeSort(a);
+        performMergeSort(a);
+        System.out.println(Arrays.toString(a));
     }
     public static void performMergeSort(int[] a) {
         mergeSort(a, 0, a.length-1);
@@ -18,34 +19,32 @@ public class MergeSort {
             mergeSort(a, middle+1, r);
             merge(a, l, middle, r);
         }
-        System.out.println(Arrays.toString(a));
     }
 
     private static void merge(int [] a,int l, int m,int r) {
-        int n1 = m;
+        int n1 = m - l + 1;
         int n2 = r - m;
 
         int[] left = new int[n1];
         int[] right = new int[n2];
 
-        for(int i=0;i<m;i++)
-            left[i] = a[i];
-        for(int i=m+1;i<r;i++)
-            right[i] = a[i];
+        for(int i=0;i<n1;i++)
+            left[i] = a[l+i];
+        for(int j=0;j<n2;j++)
+            right[j] = a[m+1+j];
 
-        int i=0,j=0,k=0;
-        while(i<n1 && j<n2) {
-            if(left[i] <= right[j]) {
+        int i=0,j=0,k=l;
+        while(i < n1 && j<n2) {
+            if(left[i] <= right[j])
                 a[k++] = left[i++];
-            } else a[k++] = right[j++];
+            else a[k++] = right[j++];
         }
+
 
         while(i<n1)
             a[k++] = left[i++];
         while(j<n2)
             a[k++] = right[j++];
-
-
     }
 
     public static void performRecursiveMergeSort(int[] a) {
