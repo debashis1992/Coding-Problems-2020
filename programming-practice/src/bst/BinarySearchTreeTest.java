@@ -8,7 +8,8 @@ public class BinarySearchTreeTest {
         for(int i: a)
             bst.addNode(i);
 
-        bst.printInOrderTraversal();
+//        bst.printInOrderTraversal();
+        bst.preOrderTraversal();
     }
 }
 
@@ -62,6 +63,19 @@ class BST {
         printInOrderTraversal(node.leftNode);
         System.out.println(node.value);
         printInOrderTraversal(node.rightNode);
+    }
+
+    public void preOrderTraversal() {
+        Node currNode = rootNode;
+        printPreOrderTraversal(currNode);
+    }
+    private void printPreOrderTraversal(Node node) {
+        if(node==null)
+            return;
+        System.out.print(node.value);
+        printPreOrderTraversal(node.leftNode);
+        printPreOrderTraversal(node.rightNode);
+
     }
 
 }
