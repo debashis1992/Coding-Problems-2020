@@ -81,6 +81,7 @@ public class MergeSortForLinkedListTest {
 class Node {
     int value;
     Node nextNode;
+    Node prev;
     public Node(int value) {
         this.value = value;
         this.nextNode = null;
