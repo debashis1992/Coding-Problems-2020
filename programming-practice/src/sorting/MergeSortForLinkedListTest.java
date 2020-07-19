@@ -25,7 +25,7 @@ public class MergeSortForLinkedListTest {
         list2.addNode(20);
 
         Node sortedList = sortedMerge(list1.headNode, list2.headNode);
-        list.print(sortedList);
+//        list.print(sortedList);
 
     }
     private static Node getMiddleElement(Node node) {
