@@ -1,22 +1,34 @@
 package trees;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class BinaryTreeTest {
     public static void main(String[] args) {
         BinaryTree tree = new BinaryTree();
-        tree.addNode(2);
-        tree.addNode(1);
-        tree.addNode(5);
-        tree.addNode(7);
-        tree.addNode(4);
+//        tree.addNode(2);
+//        tree.addNode(1);
+//        tree.addNode(5);
+//        tree.addNode(7);
+//        tree.addNode(4);
 
 //        tree.deleteNode(5);
 //        System.out.println(tree);
 //        System.out.println(tree.findElement(7));
 //        tree.performPostOrderTraversal();
-        tree.performBreadthFirstSearchTraversal();
+//        tree.performBreadthFirstSearchTraversal();
+
+        tree.addNode(4);
+        tree.addNode(2);
+        tree.addNode(7);
+        tree.addNode(1);
+        tree.addNode(3);
+        tree.addNode(6);
+        tree.addNode(9);
+
+        tree.leftSideView();
     }
 }
 
@@ -149,6 +161,63 @@ class BinaryTree {
             if(node.right!=null)
                 queue.add(node.right);
         }
+    }
+
+    public Node invertTree() {
+        return invertTreeRecursively(rootNode);
+    }
+    private Node invertTreeRecursively(Node node) {
+        if(node==null)
+            return null;
+        if(node.left==null && node.right==null)
+            return node;
+        invertTreeRecursively(node.left);
+        invertTreeRecursively(node.right);
+        Node tempNode = node.left;
+        node.left = node.right;
+        node.right = tempNode;
+        return node;
+    }
+
+    public void rightViewOfTree() {
+        List<Integer> list = new ArrayList<>();
+        Node node = rootNode;
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(node);
+        while(!queue.isEmpty()) {
+            int n = queue.size();
+            for(int i=0;i<n;i++) {
+                Node temp = queue.remove();
+                if(i==n-1)
+                  list.add(temp.data);
+
+                if(temp.left!=null)
+                    queue.add(temp.left);
+                if(temp.right!=null)
+                    queue.add(temp.right);
+            }
+        }
+        System.out.println("Right View -> "+list);
+    }
+
+    public void leftSideView() {
+        List<Integer> list = new ArrayList<>();
+        Node node = rootNode;
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(node);
+        while(!queue.isEmpty()) {
+            int n = queue.size();
+            for(int i=0;i<n;i++) {
+                Node temp = queue.remove();
+                if(i==n-1)
+                    list.add(temp.data);
+                if(temp.right!=null)
+                    queue.add(temp.right);
+                if(temp.left!=null)
+                    queue.add(temp.left);
+            }
+        }
+        System.out.println("Left View -> "+list);
     }
 
 }
