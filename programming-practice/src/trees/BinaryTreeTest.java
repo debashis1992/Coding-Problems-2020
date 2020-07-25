@@ -1,5 +1,6 @@
 package trees;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,16 +20,15 @@ public class BinaryTreeTest {
 //        System.out.println(tree.findElement(7));
 //        tree.performPostOrderTraversal();
 //        tree.performBreadthFirstSearchTraversal();
+          int[] a = {1,7,5,50,40,10};
+          Node node = tree.constructBSTFromPostOrder(a, a.length);
+//          System.out.println(node);
 
-        tree.addNode(4);
-        tree.addNode(2);
-        tree.addNode(7);
-        tree.addNode(1);
-        tree.addNode(3);
-        tree.addNode(6);
-        tree.addNode(9);
+        int[] inorder = {9,3,15,20,7};
+        int[] postorder = {9,15,7,20,3};
+        Node node2 = tree.constructBSTFromInorderAndPostOrder(inorder, postorder, postorder.length);
+        System.out.println(node2);
 
-        tree.leftSideView();
     }
 }
 
@@ -220,6 +220,45 @@ class BinaryTree {
         System.out.println("Left View -> "+list);
     }
 
+    public Node constructBSTFromPostOrder(int[] post, int n) {
+        for(int i=n-1;i>=0;i--) {
+            addNode(post[i]);
+        }
+        return rootNode;
+    }
+
+    public Node constructBSTFromInorderAndPostOrder(int[] inorder, int[] postorder,int n) {
+        Index pIndex = new Index();
+        pIndex.index = n-1;
+        return buildUtil(inorder, postorder,0,n-1,pIndex);
+    }
+    private Node buildUtil(int[] in,int[] post,int start,int end, Index pIndex) {
+
+        if(start>end)
+            return null;
+        Node node = new Node(post[pIndex.index]);
+        (pIndex.index)--;
+        // If this node has no children then return
+        if(start==end)
+            return node;
+        // search element in inorder
+        int index  = search(in, start, end, node.data);
+        node.right = buildUtil(in, post, index+1,end,pIndex);
+        node.left = buildUtil(in, post,start,index-1,pIndex);
+        return node;
+    }
+    private int search(int[] in, int start,int end,int p) {
+        for(int i=start;i<=end;i++) {
+            if(p==in[i])
+                return i;
+        }
+        return -1;
+    }
+
+}
+
+class Index {
+    int index;
 }
 
 class Node {
