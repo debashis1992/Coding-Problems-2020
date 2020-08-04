@@ -6,10 +6,26 @@ public class MinSubArraySumTest {
 //        int s = 7;
 //        System.out.println("count : "+minSubArrayLenImprov(s,a));
 
-        int[] arr = {1, 4};
+        int[] arr = {-1,-1,-1,-2};
         int sum = 0;
+//        findSubArrayWithGivenSum(arr, sum);
+        System.out.println(findLargestSum(arr));
+    }
 
-        findSubArrayWithGivenSum(arr, sum);
+    public static int findLargestSum(int[] a) {
+        int n=a.length;
+        int maxSum=Integer.MIN_VALUE, start=0, end=0;
+        int sum =0;
+        while(start < n && end < n) {
+            sum+= a[end++];
+
+            if(sum > maxSum) {
+                maxSum = sum;
+            } else {
+                sum-= a[start++];
+            }
+        }
+        return maxSum==Integer.MIN_VALUE ? 0 : maxSum;
     }
 
     public static int findSubArrayWithGivenSum(int[] ar, int sum) {
