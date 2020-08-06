@@ -255,6 +255,29 @@ class BinaryTree {
         return -1;
     }
 
+    public int heightRec(Node node) {
+        if(node==null)  return 0;
+        return 1 + Math.max(heightRec(node.left), heightRec(node.right));
+    }
+
+    public int heightIterative(Node node) {
+        int c=0;
+        Queue<Node> q = new LinkedList<>();
+        if(node!=null)
+            q.add(node);
+        while(!q.isEmpty()) {
+            int size = q.size();
+            while(size-->0) {
+                Node node1 = q.remove();
+                if(node1.left!=null)    q.add(node1.left);
+                if(node1.right!=null)   q.add(node1.right);
+            }
+            c++;
+        }
+        return c;
+
+    }
+
 }
 
 class Index {

@@ -1,5 +1,11 @@
 package arrays;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class MinSubArraySumTest {
     public static void main(String[] args) {
 //        int[] a = {2,3,1,2,4,3};
@@ -9,7 +15,10 @@ public class MinSubArraySumTest {
         int[] arr = {-1,-1,-1,-2};
         int sum = 0;
 //        findSubArrayWithGivenSum(arr, sum);
-        System.out.println(findLargestSum(arr));
+//        System.out.println(findLargestSum(arr));
+        int[] ar = {1, 1, 10, 10, 15, 10, 15, 10, 10, 15, 10, 15 };
+        ArrayList<Integer> list = (ArrayList<Integer>)Arrays.stream(ar).boxed().collect(Collectors.toList());
+        System.out.println(maxUnsortedSubArray(list));
     }
 
     public static int findLargestSum(int[] a) {
@@ -93,5 +102,31 @@ public class MinSubArraySumTest {
         }
 
         return minLen == Integer.MAX_VALUE ? 0 : minLen;
+    }
+
+    public static ArrayList<Integer> maxUnsortedSubArray(ArrayList<Integer> a) {
+        int[] ar = a.stream().mapToInt(x->x).toArray();
+        int start=0,end=1;
+        ArrayList<Integer> list = null;
+        int c=1;
+        int min = Integer.MIN_VALUE;
+        int n=ar.length;
+        for(int i=start;end<n;i++) {
+            if(ar[start] <= ar[end]) {
+                start++;
+                end++;
+            } else {
+                c=end-start;
+                if(c > min) {
+                    min=c;
+                    list = new ArrayList<>();
+                    list.add(start);
+                    list.add(end);
+                }
+                end++;
+            }
+        }
+        return list!=null ? list
+                : (ArrayList<Integer>)Stream.of(-1).collect(Collectors.toList());
     }
 }
