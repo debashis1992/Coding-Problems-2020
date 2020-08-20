@@ -1,10 +1,7 @@
 package trees;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class BinaryTreeTest {
     public static void main(String[] args) {
@@ -27,7 +24,19 @@ public class BinaryTreeTest {
         int[] inorder = {9,3,15,20,7};
         int[] postorder = {9,15,7,20,3};
         Node node2 = tree.constructBSTFromInorderAndPostOrder(inorder, postorder, postorder.length);
-        System.out.println(node2);
+//        System.out.println(node2);
+
+        Node node1 = new Node(3);
+        node1.left = new Node(5);
+        node1.left.left = new Node(6);
+        node1.left.right = new Node(2);
+        node1.left.right.left = new Node(7);
+        node1.left.right.right = new Node(4);
+        node1.right = new Node(1);
+        node1.right.left = new Node(0);
+        node1.right.right = new Node(8);
+
+        System.out.println("lca found : "+new BinaryTree().getLCAMedium(node1,0,8));
 
     }
 }
@@ -275,9 +284,92 @@ class BinaryTree {
             c++;
         }
         return c;
+    }
+    public int getLCA(Node node, int v1, int v2) {
+        Node temp = node;
+        Queue<Integer> queue1 = getPath(temp, v1);
+        Queue<Integer> queue2 = getPath(temp, v2);
+        int lca = -1;
+        for(int i=0;i<Math.min(queue1.size(), queue2.size());i++) {
+            int i1 = queue1.poll();
+            int i2 = queue2.poll();
+            if(i1==i2)
+                lca=i1;
+        }
+        return lca;
+    }
+
+    public Queue<Integer> getPath(Node node, int v) {
+        Queue<Integer> queue = new LinkedList<>();
+        while(node!=null && node.data!=v) {
+            queue.add(node.data);
+            if(node.data > v)
+                node = node.left;
+             else
+                node = node.right;
+        }
+        queue.add(node.data);
+
+        return queue;
+    }
+
+    public int getLCAMedium(Node node,int v1,int v2) {
+        Queue<Integer> q1 = new LinkedList<>();
+        Queue<Integer> q2 = new LinkedList<>();
+
+        findElement(node,v1,q1);
+        findElement(node,v2,q2);
+        int lca=0;
+        int min = Math.min(q1.size(),q2.size());
+        for(int i=0;i<min;i++) {
+            int i1=q1.poll();
+            int i2=q2.poll();
+            if(i1==i2)
+                lca=i1;
+        }
+        return lca;
+    }
+    public boolean findElement(Node node, int v, Queue<Integer> queue) {
+        if(node==null)  return false;
+        if(node.data==v)    return true;
+        else queue.add(node.data);
+
+        return findElement(node.left,v,queue) ||
+                findElement(node.right,v,queue);
+    }
+
+    public static void printTopView(Node root) {
+        if(root==null)  return;
+
+        Queue<QueueNode> queue = new LinkedList<>();
+        Map<Integer,Node> map = new HashMap<>();
+        queue.add(new QueueNode(root, 0));
+
+        while(!queue.isEmpty()) {
+            QueueNode obj = queue.poll();
+            if(!map.containsKey(obj.hd))
+                map.put(obj.hd, obj.node);
+
+            if(obj.node.left!=null)
+                queue.add(new QueueNode(obj.node.left, obj.hd-1));
+            if(obj.node.right!=null)
+                queue.add(new QueueNode(obj.node.right, obj.hd+1));
+        }
+
+        map.entrySet().stream().forEach((entry) -> {
+            System.out.print(entry.getValue()+" ");
+        });
 
     }
 
+    static class QueueNode {
+        Node node;
+        int hd;
+        public QueueNode(Node node, int hd) {
+            this.node = node;
+            this.hd = hd;
+        }
+    }
 }
 
 class Index {
