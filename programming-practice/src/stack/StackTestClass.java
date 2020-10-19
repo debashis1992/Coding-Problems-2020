@@ -1,5 +1,7 @@
 package stack;
 
+import java.util.Stack;
+
 public class StackTestClass {
     public static void main(String[] args) {
         Stacks stacks = new Stacks();
