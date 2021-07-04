@@ -72,6 +72,34 @@ class MyDoublyLinkedList {
         }
         return head;
     }
+
+    public static Node addOne(Node head)
+    {
+        int div=add(head);
+        if(div>0) {
+            Node newNode = new Node(div);
+            newNode.next = head;
+            head = newNode;
+            return newNode;
+        } else return head;
+    }
+    public static int add(Node node) {
+        if(node.next==null) {
+            int div=0;
+            if((node.val+1)/10 > 0)
+                div=(node.val+1)/10;
+            node.val = (node.val+1)%10;
+            return div;
+        } else {
+            int div = add(node.next);
+            if(div!=0) {
+                int newValue=(node.val+div)%10;
+                div=(node.val+div)/10;
+                node.val=newValue;
+            }
+            return div;
+        }
+    }
 }
 
 public class DoublyLinkedListTest {
