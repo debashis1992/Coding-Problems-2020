@@ -12,10 +12,37 @@ public class LinkedListTest {
         // 4 - 3 - 2 - 1
 //        insertionSort(list);
 //        System.out.println(list.head);
-          Node someHead = rotateList(list,1);
-        System.out.println(someHead);
+//          Node someHead = rotateList(list,1);
+//        System.out.println(someHead);
+        Node head = new Node(1);
+        head.next=new Node(2);
+        head.next.next=new Node(3);
+        head.next.next.next=new Node(4);
+        head.next.next.next.next=new Node(5);
+        printList(reverseLinkedList(head));
+
     }
 
+    public static Node reverseLinkedList(Node head) {
+        Node currNode=head;
+        Node nextNode=null,prevNode=null;
+        while(currNode!=null) {
+            nextNode=currNode.next;
+            currNode.next=prevNode;
+            prevNode=currNode;
+            currNode=nextNode;
+        }
+        return prevNode;
+    }
+    public static void printList(Node head) {
+        Node curr=head;
+        while(curr!=null) {
+            System.out.print(curr.val+" -> ");
+            curr=curr.next;
+        }
+        System.out.print("null");
+        System.out.println();
+    }
     public static Node rotateList(MyLinkedList list, int k) {
         Node curr = list.head;
         int len=0;
@@ -93,4 +120,6 @@ class MyLinkedList {
             tail = node;
         }
     }
+
+
 }

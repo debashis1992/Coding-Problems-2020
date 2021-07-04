@@ -39,6 +39,39 @@ class MyDoublyLinkedList {
         }
         System.out.println();
     }
+
+    public DNode reverseDDL(DNode head) {
+        DNode currNode=head;
+        DNode nextNode=null, prevNode=null;
+        while(currNode!=null) {
+            nextNode=currNode.next;
+            currNode.next=prevNode;
+            currNode.prev=nextNode;
+
+            prevNode=currNode;
+            currNode=nextNode;
+        }
+        return prevNode;
+    }
+
+    public DNode rotate(DNode head, int p) {
+        if(head==null) return null;
+        DNode currNode=head;
+        DNode tail=null;
+        while(currNode!=null) {
+            tail=currNode;
+            currNode=currNode.next;
+        }
+        while(p-->0) {
+            DNode newHeadNode = head.next;
+            head.next=null;
+            head.prev=tail;
+            tail.next=head;
+            tail=head;
+            head = newHeadNode;
+        }
+        return head;
+    }
 }
 
 public class DoublyLinkedListTest {
@@ -53,8 +86,10 @@ public class DoublyLinkedListTest {
 
         DNode headNode = list.head;
         DNode tailNode = list.tail;
+//        list.traverseFwd(headNode);
+//        list.traverseBwd(tailNode);
 
-        list.traverseFwd(headNode);
-        list.traverseBwd(tailNode);
+//        DNode newArrangement = list.reverseDDL(headNode);
+        DNode node = list.rotate(headNode,2);
     }
 }
