@@ -57,20 +57,17 @@ public class Deque<Item> implements Iterable<Item> {
 
             @Override
             public boolean hasNext() {
-                return headNode.next != null;
+                return headNode!=null;
             }
 
             @Override
             public Item next() {
-                if (i == 0) {
-                    ++i;
-                    return headNode.value;
-                }
                 if (headNode == null) {
                     throw new NoSuchElementException("no elements present");
                 }
+                Item value = headNode.value;
                 headNode = headNode.next;
-                return headNode.value;
+                return value;
             }
         };
     }
@@ -79,25 +76,18 @@ public class Deque<Item> implements Iterable<Item> {
     public static void main(String[] args) {
         Deque<Integer> deque = new Deque<>();
         deque.addFirst(1);
-        deque.addFirst(2);
-//        System.out.println(deque.removeFirst());
-//        System.out.println(deque.removeLast());
-//        System.out.println(deque.isEmpty());
+        deque.removeFirst();
         deque.addFirst(3);
-        deque.addFirst(4);
+        deque.removeFirst();
         deque.addFirst(5);
-
-//        System.out.println(deque.removeLast());
-//        System.out.println(deque.removeFirst());
-
-        deque.addFirst(100);
-        Iterator<Integer> iterator = deque.iterator();
-        while (iterator.hasNext()) {
-            System.out.print(iterator.next() + " --> ");
+        deque.removeFirst();
+        deque.addFirst(7);
+        deque.addFirst(8);
+//        deque.removeFirst();
+        Iterator<Integer> it = deque.iterator();
+        while(it.hasNext()) {
+            System.out.println(it.next());
         }
-        System.out.print("NULL");
-        System.out.println();
-
     }
 
 }

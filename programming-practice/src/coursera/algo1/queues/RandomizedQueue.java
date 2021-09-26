@@ -58,20 +58,17 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
             @Override
             public boolean hasNext() {
-                return headNode.next != null;
+                return headNode!=null;
             }
 
             @Override
             public Item next() {
-                if (i == 0) {
-                    ++i;
-                    return headNode.value;
-                }
                 if (headNode == null) {
                     throw new NoSuchElementException("no elements present");
                 }
+                Item value = headNode.value;
                 headNode = headNode.next;
-                return headNode.value;
+                return value;
             }
         };
     }
@@ -158,6 +155,8 @@ class RandomLinkedList<Item> {
 
     private int getRandomNumber() {
         int min = 0;
+        if(this.size==1)
+            return 0;
         int max = this.size - 1;
         return StdRandom.uniform(min, max);
     }
