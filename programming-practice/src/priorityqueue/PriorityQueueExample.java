@@ -21,6 +21,9 @@ public class PriorityQueueExample {
         int[] ar = {3,2,1,5,6,4};
         System.out.println(findKthLargestElement(ar,2));
 
+        int[] kArr = {6,5,3,2,8,10,9};
+        System.out.println(Arrays.toString(sortNearlySortedArray(kArr,3)));
+
     }
 
     public static List<String> findTopKElements(String[] arr, int k) {
@@ -62,5 +65,24 @@ public class PriorityQueueExample {
 
         }
         return pq.poll();
+    }
+
+    public static int[] sortNearlySortedArray(int[] arr,int k) {
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>(
+                (a,b) -> a.compareTo(b)
+        );
+
+        List<Integer> list = new ArrayList<>();
+        for(int ar: arr) {
+            minHeap.offer(ar);
+
+            if (minHeap.size() > k)
+                list.add(minHeap.poll());
+        }
+
+        while(!minHeap.isEmpty())
+            list.add(minHeap.poll());
+
+        return list.stream().mapToInt(x -> x).toArray();
     }
 }
