@@ -23,6 +23,131 @@ public class LinkedListTest {
 
     }
 
+    public static boolean findCycle(Node head) {
+        // maintain 2 pointers
+        // fast moves 2 places, while slow moves a single place
+        // if someone is running faster, in a closed loop they are bound to meet at some place
+
+        Node fast = head, slow = head;
+        while(fast!=null && fast.next!=null) {
+            fast = fast.next.next;
+            slow = slow.next;
+
+            if(fast == slow)
+                return true;
+        }
+        return false;
+    }
+
+    public static int findLength(Node head) {
+        // to find the length of a closed loop(cycle), once the fast and slow pointers meet at some place
+        // we can save that node, and again traverse by one place each time till the point
+        // we get the same node again
+        // that's the length of the cycle
+
+        Node fast = head, slow = head;
+        while(fast!=null && fast.next!=null) {
+            fast = fast.next.next;
+            slow = slow.next;
+
+            if(fast == slow)
+                return calculateLength(slow);
+        }
+        return 0;
+    }
+
+    public static int calculateLength(Node head) {
+        int count = 0;
+        Node curr = head;
+        do {
+            curr = curr.next;
+            ++count;
+        } while(curr!=head);
+
+        return count;
+    }
+
+    public static Node findCycleStartingNode(Node head) {
+        int length = findLength(head);
+        Node p1 = head, p2 = head;
+        // move p2 by K positions(length of the cycle)
+        while(length-->0)
+            p2 = p2.next;
+
+        while(p1!=p2) {
+            p1 = p1.next;
+            p2 = p2.next;
+        }
+        return p1;
+    }
+
+    public static Node findCycleStartingNode2(Node head) {
+        Node fast = head, slow = head;
+        while(fast!=null && fast.next!=null) {
+            fast = fast.next.next;
+            slow = slow.next;
+
+            if(fast == slow)
+                break;
+        }
+
+        slow = head;
+        while(slow!=fast) {
+            slow = slow.next;
+            fast = fast.next;
+        }
+
+        return slow;
+    }
+
+    public static Node findMiddleNode(Node head) {
+        Node fast = head, slow = head;
+        while(fast!=null && fast.next!=null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+
+        return slow;
+    }
+
+    public static boolean isPalindrome(Node head) {
+        int n = findListLength(head);
+        Node p1 = head, p2 = head;
+
+        // move p2 by (n-1) positions foreward
+        while(p2.next!=null)
+            p2 = p2.next;
+
+        // link both the nodes
+        p2.next = p1;
+
+
+        while(p1!=p2) {
+            p1 = p1.next;
+            int pos = n-1;
+            while(pos-- > 0) {
+                p2 = p2.next;
+            }
+
+            if(p1.val != p2.val)
+                return false;
+        }
+        return true;
+
+    }
+
+    public static int findListLength(Node node) {
+        int c=0;
+        Node curr = node;
+        while(curr!=null) {
+            curr = curr.next;
+            ++c;
+
+        }
+
+        return c;
+    }
+
     public static Node reverseLinkedList(Node head) {
         Node currNode=head;
         Node nextNode=null,prevNode=null;
