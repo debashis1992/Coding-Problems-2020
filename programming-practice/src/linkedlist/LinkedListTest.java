@@ -14,13 +14,84 @@ public class LinkedListTest {
 //        System.out.println(list.head);
 //          Node someHead = rotateList(list,1);
 //        System.out.println(someHead);
-        Node head = new Node(1);
-        head.next=new Node(2);
-        head.next.next=new Node(3);
-        head.next.next.next=new Node(4);
-        head.next.next.next.next=new Node(5);
-        printList(reverseLinkedList(head));
+        Node head = new Node(2);
+        head.next=new Node(4);
+        head.next.next=new Node(6);
+        head.next.next.next=new Node(8);
+        head.next.next.next.next=new Node(10);
+        head.next.next.next.next.next=new Node(12);
+//        printList(reverseLinkedList(head));
+        rearrange(head);
+        printList(head);
 
+        loopExists(new int[]{1,2,-1,2,2});
+    }
+
+    public static boolean loopExists(int[] a) {
+        for(int i=0;i<a.length;i++) {
+            int slow = i, fast = i;
+
+            boolean isForward = a[i] >=0;
+            do {
+                slow = findNextIndex(a, isForward, slow);
+                fast = findNextIndex(a, isForward, fast);
+                if(fast != -1)
+                    fast = findNextIndex(a, isForward, fast);
+
+            } while(slow!=-1 && fast!=-1 && slow!=fast);
+
+            if(slow!=-1 && slow == fast)
+                return true;
+        }
+
+        return false;
+    }
+
+    private static int findNextIndex(int[] a, boolean isForward, int currentIndex) {
+        boolean direction = a[currentIndex] >= 0;
+
+        // if opposite direction of the flow detected
+        if(isForward != direction)
+            return -1;
+
+        int nextIndex = (currentIndex + a[currentIndex]) % a.length;
+
+        // in case nextIndex becomes negative, add it to array length to make it positive
+        if(nextIndex < 0)
+            nextIndex+= a.length;
+
+        // if only one element is found in the loop
+        if(nextIndex == currentIndex)
+            return -1;
+
+        return nextIndex;
+    }
+
+    public static Node rearrange(Node head) {
+        Node p1 = head;
+        Node p2;
+
+        while(p1!=null && p1.next!=null) {
+            p2 = findLastNode(head);
+            Node next = p1.next;
+            p1.next = p2;
+            p2.next = next;
+
+            p1 = p1.next.next;
+        }
+        return head;
+    }
+
+    public static Node findLastNode(Node head) {
+        Node prev = null, curr = head;
+        while(curr.next!=null) {
+            prev = curr;
+            curr = curr.next;
+        }
+
+        // remove last node from linked list
+        prev.next = null;
+        return curr;
     }
 
     public static boolean findCycle(Node head) {
