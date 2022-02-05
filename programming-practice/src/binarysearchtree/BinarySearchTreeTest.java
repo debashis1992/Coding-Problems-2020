@@ -18,12 +18,13 @@ public class BinarySearchTreeTest {
         tree.inorder();
 
         System.out.println(tree.search(20));
-        tree.remove(20);
-        tree.inorder();
+//        tree.remove(20);
+        tree.postorder();
     }
 }
 
 class MyBinarySearchTree {
+    private static String TREE_EMPTY = "TREE EMPTY";
     Node root;
 
     private void print(Node node) {
@@ -64,7 +65,7 @@ class MyBinarySearchTree {
         if(root != null) {
             inorder(root);
         }
-        else System.out.println("Tree empty");
+        else System.out.println(TREE_EMPTY);
     }
 
     private void inorder(Node node) {
@@ -72,6 +73,34 @@ class MyBinarySearchTree {
             inorder(node.left);
             print(node);
             inorder(node.right);
+        }
+    }
+
+    public void preorder() {
+        if(root !=null)
+            preorder(root);
+        else System.out.println(TREE_EMPTY);
+    }
+
+    private void preorder(Node node) {
+        if(node!=null) {
+            print(node);
+            preorder(node.left);
+            preorder(node.right);
+        }
+    }
+
+    public void postorder() {
+        if(root !=null)
+            postorder(root);
+        else System.out.println(TREE_EMPTY);
+    }
+
+    private void postorder(Node node) {
+        if(node!=null) {
+            postorder(node.left);
+            postorder(node.right);
+            print(node);
         }
     }
 
