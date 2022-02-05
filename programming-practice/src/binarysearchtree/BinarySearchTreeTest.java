@@ -18,7 +18,7 @@ public class BinarySearchTreeTest {
         tree.inorder();
 
         System.out.println(tree.search(20));
-        tree.remove(30);
+        tree.remove(20);
         tree.inorder();
     }
 }
@@ -94,6 +94,15 @@ class MyBinarySearchTree {
         else return search(val, node.left);
     }
 
+    private int minValue(Node node) {
+        int min = node.value;
+        while(node!=null) {
+            min = node.value;
+            node = node.left;
+        }
+        return min;
+    }
+
     public void remove(int val) {
         if(root == null)
             return;
@@ -103,7 +112,9 @@ class MyBinarySearchTree {
     private Node remove(int val, Node node) {
         if(node == null)
             return null;
-        if(node.value == val) { //value found
+
+        //value found
+        if(node.value == val) {
             //if node is a leaf node
             if(isLeafNode(node))
                 return null;
@@ -112,6 +123,14 @@ class MyBinarySearchTree {
                 if(node.left!=null)
                     return node.left;
                 else return node.right;
+            }
+
+            else {
+                //find the next min element from the right side of the subtree
+                node.value = minValue(node.right);
+
+                //delete the min value from the bst
+                node.right = remove(node.value, node.right);
             }
         }
 
