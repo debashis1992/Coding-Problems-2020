@@ -16,16 +16,27 @@ public class BFSTest {
 //        node.right.left = new TreeNode(6);
 //        node.right.right = new TreeNode(7);
 //        node.right.right.right = new TreeNode(10);
+//        TreeNode root = new TreeNode(12);
+//        root.left = new TreeNode(7);
+//        root.right = new TreeNode(1);
+//        root.right.left = new TreeNode(10);
+//        root.right.right = new TreeNode(5);
+//        System.out.println("Tree Minimum Depth: " + findDepth(root));
+//        root.left.left = new TreeNode(9);
+//        root.right.left.left = new TreeNode(11);
+//        System.out.println("Tree Minimum Depth: " + findDepth(root));
+
         TreeNode root = new TreeNode(12);
         root.left = new TreeNode(7);
         root.right = new TreeNode(1);
+        root.left.left = new TreeNode(9);
         root.right.left = new TreeNode(10);
         root.right.right = new TreeNode(5);
-        System.out.println("Tree Minimum Depth: " + findDepth(root));
-        root.left.left = new TreeNode(9);
-        root.right.left.left = new TreeNode(11);
-        System.out.println("Tree Minimum Depth: " + findDepth(root));
+        root.left.left.left = new TreeNode(3);
+        List<Integer> list = rightView(root);
 
+        for(int i:list)
+            System.out.println(i);
     }
 
     public static List<List<Integer>> levelOrderTraversal(TreeNode node) {
@@ -98,6 +109,34 @@ public class BFSTest {
             return 1+findDepth(node.left);
 
         return 1 + Math.min(findDepth(node.left), findDepth(node.right));
+    }
+
+    public static List<Integer> rightView(TreeNode node) {
+        if(node == null)
+            return new ArrayList<>();
+
+        List<Integer> result = new ArrayList<>();
+        Queue<TreeNode> q = new LinkedList<>();
+        q.offer(node);
+
+        while(!q.isEmpty()) {
+            int size = q.size();
+
+            for(int i=0;i<size;i++) {
+                TreeNode n = q.poll();
+                //get the last node from each level
+                //similarly, for left view, it should be the first node from each level
+                if(i == size-1)
+                    result.add(n.val);
+
+                if(n.left!=null)
+                    q.offer(n.left);
+                if(n.right!=null)
+                    q.offer(n.right);
+
+            }
+        }
+        return result;
     }
 }
 
