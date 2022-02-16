@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Queue;
 
 public class BFSTest {
+    public static List<String> paths = new ArrayList<>();
     public static void main(String[] args) {
 //        TreeNode node = new TreeNode(1);
 //        node.left = new TreeNode(2);
@@ -32,11 +33,65 @@ public class BFSTest {
         root.left.left = new TreeNode(9);
         root.right.left = new TreeNode(10);
         root.right.right = new TreeNode(5);
-        root.left.left.left = new TreeNode(3);
+//        root.left.left.left = new TreeNode(3);
         List<Integer> list = rightView(root);
 
         for(int i:list)
             System.out.println(i);
+
+        System.out.println(sum(root, 23));
+        System.out.println(sum(root, 16));
+
+        TreeNode root2 = new TreeNode(1);
+        root2.left = new TreeNode(7);
+        root2.right = new TreeNode(9);
+        root2.left.left = new TreeNode(4);
+        root2.left.right = new TreeNode(5);
+
+        root2.right.left = new TreeNode(2);
+        root2.right.right = new TreeNode(7);
+
+        System.out.println(allPaths(root2, 12));
+    }
+
+    public static boolean sum(TreeNode node, int x) {
+        if (node == null)
+            return false;
+
+        // if the current node is a leaf and its value is equal to the sum, we've found a path
+        if (node.val == x && node.left == null && node.right == null)
+            return true;
+
+        // recursively call to traverse the left and right sub-tree
+        // return true if any of the two recursive call return true
+        return sum(node.left, x - node.val) || sum(node.right, x - node.val);
+    }
+
+    public static List<List<Integer>> allPaths(TreeNode node, int x) {
+        paths = new ArrayList<>();
+        path(node, x, "");
+        List<List<Integer>> list = new ArrayList<>();
+        for(String p: paths) {
+            List<Integer> li = new ArrayList<>();
+            String[] temp = p.split(",");
+            for(String s: temp)
+                li.add(Integer.valueOf(s));
+            list.add(li);
+        }
+        return list;
+    }
+
+    private static boolean path(TreeNode node, int x, String path) {
+        if(node == null)
+            return false;
+
+        if(node.val == x && node.left == null && node.right == null) {
+            path=path+","+node.val;
+            paths.add(path);
+            return false;
+        }
+        return path(node.left, x - node.val, path.isEmpty() ? String.valueOf(node.val) : path+","+node.val) ||
+            path(node.right, x - node.val, path.isEmpty() ? String.valueOf(node.val) : path+","+node.val);
     }
 
     public static List<List<Integer>> levelOrderTraversal(TreeNode node) {
@@ -145,6 +200,8 @@ class TreeNode {
     TreeNode left;
     TreeNode right;
 
+    public TreeNode() {
+    }
     public TreeNode(int val) {
         this.val=val;
     }
