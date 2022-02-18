@@ -1,12 +1,16 @@
 package educative;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class BFSTest {
     public static List<String> paths = new ArrayList<>();
+    public static List<Integer> vals = new ArrayList<>();
+    public static int count = 0;
+    public static Set<List<String>> path = new LinkedHashSet<>();
+
+    public static String regex = "->";
+
     public static void main(String[] args) {
 //        TreeNode node = new TreeNode(1);
 //        node.left = new TreeNode(2);
@@ -36,22 +40,143 @@ public class BFSTest {
 //        root.left.left.left = new TreeNode(3);
         List<Integer> list = rightView(root);
 
-        for(int i:list)
-            System.out.println(i);
+//        for(int i:list)
+//            System.out.println(i);
 
-        System.out.println(sum(root, 23));
-        System.out.println(sum(root, 16));
+//        System.out.println(sum(root, 23));
+//        System.out.println(sum(root, 16));
 
         TreeNode root2 = new TreeNode(1);
         root2.left = new TreeNode(7);
         root2.right = new TreeNode(9);
-        root2.left.left = new TreeNode(4);
-        root2.left.right = new TreeNode(5);
-
         root2.right.left = new TreeNode(2);
-        root2.right.right = new TreeNode(7);
+        root2.right.right = new TreeNode(9);
 
-        System.out.println(allPaths(root2, 12));
+//        root2.right.left = new TreeNode(2);
+//        root2.right.right = new TreeNode(7);
+//
+//        System.out.println(allPaths(root2, 12));
+        int[] sequence = {1,9,9};
+//        System.out.println(findPath(root2, sequence));
+
+        TreeNode root3 = new TreeNode(1);
+        root3.left = new TreeNode(0);
+        root3.right = new TreeNode(1);
+        root3.left.right = new TreeNode(1);
+        root3.right.left = new TreeNode(6);
+        root3.right.right = new TreeNode(5);
+
+//        System.out.println(findPath(root3, new int[] {1,0,7}));
+//        System.out.println(findPath(root3, new int[] {1,1,6}));
+
+        TreeNode root4 = new TreeNode(1);
+        root4.left = new TreeNode(7);
+        root4.right = new TreeNode(9);
+        root4.left.left = new TreeNode(6);
+        root4.left.right = new TreeNode(5);
+        root4.right.left = new TreeNode(2);
+        root4.right.right = new TreeNode(3);
+
+        TreeNode root5 = new TreeNode(12);
+        root5.left = new TreeNode(7);
+        root5.right = new TreeNode(1);
+        root5.left.left = new TreeNode(4);
+        root5.right.left = new TreeNode(10);
+        root5.right.right = new TreeNode(5);
+
+        System.out.println(countPaths(root4, 12));
+    }
+
+    public static int maxDepth(TreeNode node) {
+        if(node == null)
+            return 0;
+
+        return 1+Math.max(maxDepth(node.left), maxDepth(node.right));
+    }
+
+    public static int findDiameter(TreeNode node) {
+        if(node == null)
+            return 0;
+
+        int d1 = findDiameter(node.left);
+        int d2 = findDiameter(node.right);
+        int d3 = maxDepth(node.left)+maxDepth(node.right)+1;
+
+        return Math.max(d1, Math.max(d2, d3));
+    }
+
+    public static int countPaths(TreeNode root, int S) {
+        List<Integer> currentPath = new LinkedList<>();
+        return countPathsRecursive(root, S, currentPath);
+    }
+
+    private static int countPathsRecursive(TreeNode currentNode, int S, List<Integer> currentPath) {
+        if (currentNode == null)
+            return 0;
+
+        // add the current node to the path
+        currentPath.add(currentNode.val);
+        int pathCount = 0, pathSum = 0;
+        // find the sums of all sub-paths in the current path list
+        ListIterator<Integer> pathIterator = currentPath.listIterator(currentPath.size());
+        while (pathIterator.hasPrevious()) {
+            pathSum += pathIterator.previous();
+            // if the sum of any sub-path is equal to 'S' we increment our path count.
+            if (pathSum == S) {
+                pathCount++;
+            }
+        }
+
+        // traverse the left sub-tree
+        pathCount += countPathsRecursive(currentNode.left, S, currentPath);
+        // traverse the right sub-tree
+        pathCount += countPathsRecursive(currentNode.right, S, currentPath);
+
+        // remove the current node from the path to backtrack,
+        // we need to remove the current node while we are going up the recursive call stack.
+        currentPath.remove(currentPath.size() - 1);
+
+        return pathCount;
+    }
+
+    public static boolean findPath(TreeNode node, int[] sequence) {
+        return paths(node, sequence, "");
+    }
+
+    private static boolean paths(TreeNode node, int[] sequence, String path) {
+        if(node == null)
+            return false;
+
+        if(node.left == null && node.right == null) {
+            //check if path is equal to sequence
+            path+= node.val;
+//            System.out.println("paths: "+path);
+            int[] p = Arrays.stream(path.split("->")).collect(Collectors.toList())
+                    .stream().mapToInt(x -> Integer.parseInt(x)).toArray();
+            return Arrays.equals(p, sequence);
+        }
+
+        return paths(node.left, sequence, path.isEmpty() ? node.val+"->" : path+node.val+"->")
+                || paths(node.right, sequence, path.isEmpty() ? node.val+"->" : path+node.val+"->");
+    }
+
+    public static int sumPath(TreeNode node) {
+        vals = new ArrayList<>();
+        sumPath(node, 0);
+        System.out.println("vals:"+vals);
+        return vals.stream().reduce(0, Integer::sum);
+    }
+
+    private static void sumPath(TreeNode node, int num) {
+        if(node == null)
+            return;
+
+        if(node.left == null && node.right == null) {
+            num=num*10 + node.val;
+            vals.add(Integer.valueOf(num));
+        }
+        sumPath(node.left, num*10 + node.val);
+        sumPath(node.right, num*10 + node.val);
     }
 
     public static boolean sum(TreeNode node, int x) {
