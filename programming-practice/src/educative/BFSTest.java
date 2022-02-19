@@ -4,6 +4,15 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class BFSTest {
+    static class TreeInfo {
+        int height;
+        int diameter;
+
+        public TreeInfo(int height, int diameter) {
+            this.height = height;
+            this.diameter = diameter;
+        }
+    }
     public static List<String> paths = new ArrayList<>();
     public static List<Integer> vals = new ArrayList<>();
     public static int count = 0;
@@ -84,7 +93,60 @@ public class BFSTest {
         root5.right.left = new TreeNode(10);
         root5.right.right = new TreeNode(5);
 
-        System.out.println(countPaths(root4, 12));
+//        System.out.println(countPaths(root4, 12));
+        TreeNode node1 = new TreeNode(3);
+        node1.left = new TreeNode(4);
+        node1.right = new TreeNode(5);
+        node1.left.left = new TreeNode(1);
+        node1.left.right = new TreeNode(2);
+        node1.left.right.left = new TreeNode(0);
+
+        TreeNode node2 = new TreeNode(4);
+        node2.left = new TreeNode(1);
+        node2.right = new TreeNode(2);
+
+        System.out.println(isSubtree(node1, node2));
+    }
+
+    public static boolean isSubtree(TreeNode root, TreeNode subRoot) {
+        if(subRoot == null)
+            return true;
+        if(root == null)
+            return false;
+
+        if(root.val == subRoot.val) {
+            if(isIdentical(root, subRoot))
+                return true;
+        }
+        return isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);
+    }
+
+    private static boolean isIdentical(TreeNode root, TreeNode subRoot) {
+        if(root == null && subRoot == null)
+            return true;
+        if(root == null || subRoot == null)
+            return false;
+
+        if(root.val == subRoot.val)
+            return isIdentical(root.left, subRoot.left) && isIdentical(root.right, subRoot.right);
+        return false;
+    }
+
+    public static TreeInfo diameter2(TreeNode node) {
+        if(node == null)
+            return new TreeInfo(0,0);
+
+        TreeInfo left = diameter2(node.left);
+        TreeInfo right = diameter2(node.right);
+
+        int height = 1 + Math.max(left.height, right.height);
+
+        int diam1 = left.diameter;
+        int diam2 = right.diameter;
+        int diam3 = left.height + right.height + 1;
+
+        int diameter = Math.max(Math.max(diam1, diam2), diam3);
+        return new TreeInfo(height, diameter);
     }
 
     public static int maxDepth(TreeNode node) {
