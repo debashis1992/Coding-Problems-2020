@@ -1,6 +1,112 @@
 package matrix;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class MatrixTest {
+    public int[][] findFarmland(int[][] land) {
+        List<int[]> finalList = new ArrayList<>();
+        int r=land.length;
+        int c=land[0].length;
+
+        for(int i=0;i<r;i++) {
+            for(int j=0;j<c;j++) {
+                if(land[i][j] == 1) {
+                    int[] list = new int[4];
+                    list[0]=i;
+                    list[1]=j;
+                    dfs(land, i,j,r,c,list);
+                    finalList.add(list);
+                }
+
+            }
+        }
+        return finalList.toArray(new int[0][]);
+    }
+
+    public static int getMaximumGold(int[][] a) {
+        int max=0;
+
+        int r = a.length;
+        int c = a[0].length;
+
+        int[][] grid = new int[r][c];
+        for(int i=0;i<r;i++) {
+            for(int j=0;j<c;j++) {
+                grid[i][j] = -1;
+            }
+        }
+
+        for(int i=0;i<r;i++) {
+            for(int j=0;j<c;j++) {
+                if(a[i][j]!=0) {
+                    grid[i][j] = getMaxSum(a, grid, i, j);
+                    if(max < grid[i][j])
+                        max = grid[i][j];
+                }
+            }
+        }
+        return max;
+    }
+
+    private static int getMaxSum(int[][] a,int[][] grid, int i,int j) {
+        if(!isValid(a,i,j))
+            return 0;
+        else {
+            int temp = a[i][j];
+            a[i][j] = -1;
+
+            grid[i][j] = temp + Math.max(Math.max(getMaxSum(a,grid,i-1,j), getMaxSum(a,grid,i,j-1)),
+                    Math.max(getMaxSum(a,grid,i,j+1), getMaxSum(a,grid,i+1,j)));
+
+            a[i][j] = temp;
+            return grid[i][j];
+        }
+    }
+
+    private static int getMaxSumDP(int[][] a,int[][] grid, int i,int j) {
+        if(!isValid(a,i,j))
+            return 0;
+        else {
+            if(grid[i][j] == -1) {
+                int temp = a[i][j];
+                a[i][j] = -1;
+
+                grid[i][j] = temp + Math.max(Math.max(grid[i-1][j], grid[i][j-1]),
+                        Math.max(grid[i][j+1], grid[i+1][j]));
+
+                a[i][j] = temp;
+            }
+            return grid[i][j];
+        }
+    }
+
+    private static boolean isValid(int[][] a,int i,int j) {
+        return i>=0 && i<a.length &&
+                j>=0 && j<a[0].length &&
+                a[i][j]!=0 && a[i][j]!=-1;
+
+    }
+
+    private void dfs(int[][] land, int i,int j, int r,int c, int[] list) {
+        if(!isValid(land, i,j,r,c))
+            return;
+
+        //once visited, mark it as 0
+        land[i][j] = 0;
+
+        dfs(land, i,j+1, r,c,list);
+        dfs(land, i+1, j, r,c,list);
+
+        list[2] = Math.max(list[2], i);
+        list[3] = Math.max(list[3], j);
+    }
+
+    private boolean isValid(int[][] land, int i,int j,int r,int c) {
+        return i>=0 && i<r && j>=0 && j<c && land[i][j] == 1;
+    }
+
     private int minPath(int[][] a,int[][] dp, int i, int j,int r,int c) {
         if(i==r-1) {
             dp[i][j] = a[i][j];
@@ -72,7 +178,11 @@ public class MatrixTest {
     public static void main(String[] args) {
 //        int[][] grid = {{5,4,3,2},{4,3,2,-1},{3,2,1,-1},{1,1,-1,-2},{-1,-1,-2,-3}};
 //        new MatrixTest().countNegatives(grid);
-        int[][] grid = {{2,1,3},{6,5,4},{7,8,9}};
-        System.out.println(new MatrixTest().minFallingPathSum(grid));
+//        int[][] grid = {{2,1,3},{6,5,4},{7,8,9}};
+//        System.out.println(new MatrixTest().minFallingPathSum(grid));
+
+        int[][] a = {{0,6,0},{5,8,7},{0,9,0}};
+        System.out.println(getMaximumGold(a));
+
     }
 }
