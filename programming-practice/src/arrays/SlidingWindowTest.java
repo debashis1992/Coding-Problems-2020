@@ -10,7 +10,7 @@ public class SlidingWindowTest {
 
         int[] a = {100,2,3,4,5,6,7,8,9,10};
         int k = 3;
-//        System.out.println(getWinner(a, k));
+       System.out.println(getWinner(a, k));
     }
     public static int findMaxConsecutiveSum(int[] a,int n,int k) {
         if (k > n)
