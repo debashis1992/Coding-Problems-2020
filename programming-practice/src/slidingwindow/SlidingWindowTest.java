@@ -1,7 +1,6 @@
 package slidingwindow;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class SlidingWindowTest {
     public static void main(String[] args) {
@@ -10,7 +9,83 @@ public class SlidingWindowTest {
 //        int[] a = {2,1,5,1,3,2};
 //        int[] a = {2,3,4,1,5};
 //        findMaxSubArraySum(a, 2);
-        findMinLength(new int[]{3,4,1,1,6}, 8);
+//        findMinLength(new int[]{3,4,1,1,6}, 8);
+//        longestSubstring("cbbebi", 10);
+//        longestSubstringWithFrequency("ababacb", 3);
+        longestPalindomicSubstring("bbbab");
+    }
+    public static void longestPalindomicSubstring(String s) {
+        int max=1;
+        for(int i=0;i<s.length();i++) {
+            for(int j=i+1;j<s.length();j++) {
+                String temp = s.substring(i,j);
+                if(isPalindome(temp))
+                    max= Math.max(max, temp.length());
+                else break;
+            }
+        }
+        System.out.println(max);
+    }
+    private static boolean isPalindome(String s) {
+        return new StringBuilder(s).reverse().toString().equals(s);
+    }
+
+    public static boolean check(Map<String,Integer> map, int k) {
+        for(Map.Entry<String,Integer> entry: map.entrySet()) {
+            if(entry.getValue() < k)
+                return false;
+        }
+        return true;
+    }
+    public static void longestSubstringWithFrequency(String s, int k) {
+        int start=0,end=0,n=s.length();
+        int max = 0;
+        Map<String,Integer> map = new HashMap<>();
+        for(int i=0;i<s.length();i++) {
+            String v = String.valueOf(s.charAt(i));
+            map.put(v, map.getOrDefault(v,0)+1);
+        }
+        System.out.println(map);
+        Map<String,Integer> runningMap = new HashMap<>();
+        while(end < n) {
+            String v = String.valueOf(s.charAt(end));
+            if(map.get(v) >= k) {
+                int len = end-start+1;
+                if(max < len)
+                    max = len;
+            } else {
+                if(check(runningMap, k)) {
+                    max = Math.max(max, end-start+1);
+                }
+                start=end+1;
+                end=start;
+                continue;
+            }
+            runningMap.put(v, runningMap.getOrDefault(v,0)+1);
+            end++;
+        }
+        System.out.println(max);
+    }
+
+    public static void longestSubstring(String s,int k) {
+        int start=0, end=0,n=s.length();
+        int max = Integer.MIN_VALUE;
+        Set<String> set = new HashSet<>();
+        while(end < n) {
+            set.add(String.valueOf(s.charAt(end)));
+            if(set.size() == k) {
+                if(max < (end-start+1))
+                    max = end-start+1;
+            } else if(set.size() > k) {
+                set.remove(String.valueOf(s.charAt(start)));
+                start++;
+            }
+            end++;
+        }
+
+        if(max == Integer.MIN_VALUE)
+            System.out.println(n);
+        else System.out.println(max);
     }
 
     public static void findMinLengthUsingSlidingWindow(int[] a,int s) {
