@@ -7,9 +7,53 @@ public class LongestSubstringProblems {
     public static void main(String[] args) {
 //        String s = "acbabcd";
 //        System.out.println(getLongestSubstringWithDistinctCharc(s));
-        String s = "AABABBA";
-        int k=1;
-        System.out.println(Math.max(leftToRight(s,k), rightToLeft(s, k)));
+//        String s = "abccde";
+//        int k=1;
+//        System.out.println(getLongestSubstringWithSameChar(s, k));
+
+        int[] ar = {0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1};
+        int k=3;
+        System.out.println(getLongestSubArrayWithOnesAfterReplacement(ar, k));
+    }
+
+    public static int getLongestSubArrayWithOnesAfterReplacement(int[] nums, int k) {
+        int start=0,end=0,maxOcc=0,max=0;
+        Map<Integer, Integer> map = new HashMap<>();
+        while(end < nums.length) {
+            map.put(nums[end], map.getOrDefault(nums[end],0)+1);
+
+            maxOcc = Math.max(maxOcc, map.getOrDefault(1,0));
+            if((end - start + 1) - maxOcc > k) {
+                map.put(nums[start], map.get(nums[start])-1);
+                start++;
+            }
+
+            max = Math.max(max, end-start+1);
+            end++;
+        }
+        return max;
+    }
+
+    public static int getLongestSubstringWithSameChar(String s, int k) {
+        char[] c = s.toCharArray();
+        int start=0, end=0, max=0;
+        Map<Character, Integer> map = new HashMap<>();
+        int maxOcc = 0;
+
+        while(end < c.length) {
+            map.put(c[end], map.getOrDefault(c[end],0)+1);
+
+            maxOcc = Math.max(maxOcc, map.get(c[end]));
+            if((end - start + 1) - maxOcc > k) {
+                char startChar = c[start];
+                map.put(startChar, map.get(startChar)-1);
+                start++;
+            }
+
+            max = Math.max(max, end-start+1);
+            end++;
+        }
+        return max;
     }
 
     public static int getLongestSubstringWithDistinctCharc(String s) {
