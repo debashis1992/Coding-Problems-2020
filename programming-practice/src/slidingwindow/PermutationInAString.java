@@ -1,23 +1,75 @@
 package slidingwindow;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class PermutationInAString {
-    public static boolean findPermutation(String s, String patt) {
-        Set<String> set = new HashSet<>();
-        int pattLength = patt.length();
-        permute(patt, 0, pattLength - 1, set);
-        boolean found = false;
-        for (int i = 0; i + pattLength <= s.length(); i++) {
-            if (set.contains(s.substring(i, i + patt.length()))) {
-                found = true;
-                break;
+
+    public static List<Integer> findStringAnagrams(String str, String pattern) {
+        List<Integer> list = new ArrayList<>();
+        Map<Character, Integer> map = new HashMap<>();
+        for (char ch : pattern.toCharArray())
+            map.put(ch, map.getOrDefault(ch, 0) + 1);
+
+        int start = 0, end = 0, matched = 0;
+        char[] ch = str.toCharArray();
+
+        while (end < str.length()) {
+            char rightCh = ch[end];
+            if (map.containsKey(rightCh)) {
+                map.put(rightCh, map.get(rightCh) - 1);
+                if (map.get(rightCh) == 0)
+                    matched++;
             }
+
+            if (matched == map.size())
+                list.add(start);
+
+            if (end >= pattern.length() - 1) {
+                char leftCh = ch[start++];
+                if (map.containsKey(leftCh)) {
+                    if (map.get(leftCh) == 0)
+                        matched--;
+                    map.put(leftCh, map.get(leftCh) + 1);
+                }
+            }
+
+            end++;
         }
-        return found;
+        return list;
+    }
+
+    public static boolean findPermutation(String pattern, String str) {
+        Map<Character, Integer> map = new HashMap<>();
+        for (char ch : pattern.toCharArray())
+            map.put(ch, map.getOrDefault(ch, 0) + 1);
+
+        char[] ch = str.toCharArray();
+        int start = 0, end = 0;
+        int matched = 0;
+        while (end < str.length()) {
+            char rightCh = ch[end];
+            if (map.containsKey(rightCh)) {
+                map.put(rightCh, map.get(rightCh) - 1);
+                if (map.get(rightCh) == 0)
+                    matched++;
+            }
+
+            if (matched == map.size())
+                return true;
+
+
+            if (end >= pattern.length() - 1) {
+                char leftCh = ch[start++];
+                if (map.containsKey(leftCh)) {
+                    if (map.get(leftCh) == 0)
+                        matched--;
+                    map.put(leftCh, map.get(leftCh) + 1);
+                }
+            }
+
+            end++;
+        }
+        return false;
     }
 
     public static boolean findPermutation2(String pattern, String str) {
@@ -55,9 +107,9 @@ public class PermutationInAString {
     }
 
     public static void main(String[] args) {
-        String s = "odicf";
-        String patt = "dc";
-        System.out.println(findPermutation2(patt, s));
+        String s = "abbcabc";
+        String patt = "abc";
+        System.out.println(findStringAnagrams(s, patt));
     }
 
     public static void permute(String s, int l, int r, Set<String> set) {
