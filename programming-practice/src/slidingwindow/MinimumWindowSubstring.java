@@ -6,42 +6,46 @@ import java.util.Map;
 public class MinimumWindowSubstring {
 
     public static String findSubstring(String str, String pattern) {
-        int start=0,end=0,matched=0,min=str.length();
-        Map<Character,Integer> hashMap =  new HashMap<>();
-        for(char ch: pattern.toCharArray())
-            hashMap.put(ch, hashMap.getOrDefault(ch, 0+1));
+        int start = 0, end = 0, matched = 0, min = str.length();
+        Map<Character, Integer> map = new HashMap<>();
+        for (char ch : pattern.toCharArray())
+            map.put(ch, map.getOrDefault(ch, 0) + 1);
 
         char[] ch = str.toCharArray();
-        Map<Character,Integer> map = hashMap;
-        int minStart=0, minEnd = 0;
-        while(end < str.length()) {
+        int minStart = 0, minEnd = 0;
+        while (end < str.length()) {
             char rightCh = ch[end];
-            if(map.containsKey(rightCh)) {
-                map.put(rightCh, map.get(rightCh)-1);
-                if(map.get(rightCh) == 0)
+            if (map.containsKey(rightCh)) {
+                int value = map.get(rightCh);
+                map.put(rightCh, value - 1);
+                if (value - 1 == 0)
                     matched++;
             }
-            if(matched == hashMap.size()) {
-                int length = end-start+1;
-                if(min > length) {
+
+            while (start < end && matched == map.keySet().size()) {
+                char leftCh = ch[start++];
+                if (map.containsKey(leftCh)) {
+                    int val = map.get(leftCh);
+                    map.put(leftCh, val + 1);
+                    if (val + 1 == 0)
+                        matched--;
+                }
+                if(min > end-start+1) {
                     minStart = start;
                     minEnd = end;
+                    min = end-start+1;
                 }
-                if(min == pattern.length()) {
-                    return str.substring(minStart, minEnd+1);
-                }
-                map = new HashMap<>(hashMap);
-                start++;
-                end = start;
             }
-
             end++;
         }
-        return str.substring(minStart, minEnd+1);
+        System.out.println(min);
+        if (minStart == 0 && minEnd == 0)
+            return "";
+        return str.substring(minStart, minEnd + 1);
     }
 
     public static void main(String[] args) {
-        String str = "aabdec", pattern = "abc";
+        String str = "abdbca", pattern = "abc";
         System.out.println(findSubstring(str, pattern));
     }
 }
