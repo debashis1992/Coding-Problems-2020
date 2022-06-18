@@ -6,46 +6,43 @@ import java.util.Map;
 public class MinimumWindowSubstring {
 
     public static String findSubstring(String str, String pattern) {
-        int start = 0, end = 0, matched = 0, min = str.length();
+        int i = 0, j = 0;
+        int minLen = Integer.MAX_VALUE;
         Map<Character, Integer> map = new HashMap<>();
         for (char ch : pattern.toCharArray())
             map.put(ch, map.getOrDefault(ch, 0) + 1);
-
+        int count = map.size();
+        String minWindow = "";
         char[] ch = str.toCharArray();
-        int minStart = 0, minEnd = 0;
-        while (end < str.length()) {
-            char rightCh = ch[end];
-            if (map.containsKey(rightCh)) {
-                int value = map.get(rightCh);
-                map.put(rightCh, value - 1);
-                if (value - 1 == 0)
-                    matched++;
-            }
 
-            while (start < end && matched == map.keySet().size()) {
-                char leftCh = ch[start++];
-                if (map.containsKey(leftCh)) {
-                    int val = map.get(leftCh);
-                    map.put(leftCh, val + 1);
-                    if (val + 1 == 0)
-                        matched--;
-                }
-                if(min > end-start+1) {
-                    minStart = start;
-                    minEnd = end;
-                    min = end-start+1;
-                }
+        while (j < ch.length) {
+            if (map.containsKey(ch[j])) {
+                int value = map.get(ch[j]);
+                map.put(ch[j], --value);
+                if (value == 0)
+                    count--;
             }
-            end++;
+            while (count == 0) {
+                if(minLen > (j-i+1)) {
+                    minLen = j-i+1;
+                    minWindow = str.substring(i, j + 1);
+                }
+                char startCh = ch[i];
+                if (map.containsKey(startCh)) {
+                    int startValue = map.get(startCh);
+                    map.put(startCh, ++startValue);
+                    if (startValue > 0)
+                        count++;
+                }
+                i++;
+            }
+            j++;
         }
-        System.out.println(min);
-        if (minStart == 0 && minEnd == 0)
-            return "";
-        return str.substring(minStart, minEnd + 1);
+        return minWindow;
     }
 
     public static void main(String[] args) {
-        String str = "abdbca", pattern = "abc";
+        String str = "ADOBECODEBANCAAAAABRREEEADAJJOJO", pattern = "ABC";
         System.out.println(findSubstring(str, pattern));
     }
 }
