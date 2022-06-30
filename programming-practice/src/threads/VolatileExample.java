@@ -5,16 +5,17 @@ public class VolatileExample {
     private static volatile int MY_INT = 0;
     public static void main(String[] args) {
         new ChangeListener().start();
-        new ChangeMaker().start();
+        new ChangeWriter().start();
 
     }
 
-    static class ChangeMaker extends Thread {
+    static class ChangeWriter extends Thread {
         @Override
         public void run() {
             int localVariable = MY_INT;
             while(MY_INT < 5) {
-                System.out.println("Incrementing value: "+(++localVariable));
+                ++localVariable;
+                System.out.println("Incrementing value: "+localVariable);
                 MY_INT = localVariable;
 
                 try {
