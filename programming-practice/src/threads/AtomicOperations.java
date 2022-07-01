@@ -19,6 +19,24 @@ public class AtomicOperations {
         System.out.println(i1.equals(i2));
         System.out.println(i1 == i2);
         System.out.println(i1.hashCode()+" "+i2.hashCode());
+
+        Thread t1 = new Thread(() -> {
+            System.out.println("thread executing....");
+            try {
+                Thread.sleep(2000);
+            } catch(InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                System.out.println("Thread execution complete.");
+            }
+        });
+
+        t1.start();
+        try {
+            t1.join();
+        } catch(InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
 
