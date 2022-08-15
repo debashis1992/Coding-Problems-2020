@@ -207,6 +207,46 @@ public class LinkedListTest {
 
     }
 
+    public static boolean isPalindromeWithoutModify(Node head) {
+        // find middle node
+        Node f = head, s = head;
+        Node prev = null;
+
+        while (f != null && f.next != null) {
+            prev = s;
+            f = f.next.next;
+            s = s.next;
+        }
+
+        Node right = prev.next;
+        prev.next = null; // unlink left side
+
+        right = reverseLinkedList(right);
+        Node rightCopy = right;
+
+        Node left = head;
+        boolean isPalin = true;
+        while (left != null && right != null) {
+            if (left.val != right.val) {
+                isPalin = false;
+                break;
+            }
+
+            left = left.next;
+            right = right.next;
+        }
+
+        // merge all to original list
+        Node origRight = reverseLinkedList(rightCopy);
+        Node currNode = head;
+        while (currNode.next != null) {
+            currNode = currNode.next;
+        }
+
+        currNode.next = origRight;
+        return isPalin;
+    }
+
     public static int findListLength(Node node) {
         int c=0;
         Node curr = node;
