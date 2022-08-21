@@ -38,6 +38,133 @@ public class BinaryTreeTest {
 
         System.out.println("lca found : "+new BinaryTree().getLCAMedium(node1,0,8));
 
+        Node node3=new Node(3);
+        node3.left=new Node(5);
+        node3.left.left=new Node(6);
+        node3.left.right=new Node(2);
+        node3.left.right.left=new Node(7);
+        node3.left.right.right=new Node(4);
+        node3.right=new Node(1);
+        node3.right.left=new Node(0);
+        node3.right.right=new Node(8);
+
+//        System.out.println(nodesAtDistanceK(node3, node3.left, 2));
+
+
+        int[] p = {8,5,1,7,10,12};
+//        Node root = constructBSTFromPreOrder(p);
+//        printTree(root);
+
+        constructBSTFromPreOrderTraversal(p);
+    }
+
+    public static void constructBSTFromPreOrderTraversal(int[] p) {
+        Node root = constructAccordingly(null, Integer.MIN_VALUE, Integer.MAX_VALUE, p, new int[]{0});
+        printTree(root);
+    }
+
+    private static Node constructAccordingly(Node node, int min, int max, int[] p, int[] i) {
+        if(i[0]==p.length)
+            return null;
+
+        if(p[i[0]] >=min && p[i[0]]<=max) {
+            node = new Node(p[i[0]++]);
+            node.left = constructAccordingly(node.left, min, node.data-1, p, i);
+            node.right = constructAccordingly(node.right, node.data+1, max, p, i);
+        }
+        return node;
+    }
+
+    private static void printTree(Node node) {
+        if(node==null)
+            return;
+        printTree(node.left);
+        System.out.print(node.data+" -> ");
+        printTree(node.right);
+    }
+
+    public static Node constructBSTFromPreOrder(int[] p) {
+        if(p==null || p.length==0)
+            return null;
+
+        Node node = new Node(p[0]);
+        for(int i=1;i<p.length;i++) {
+            insertAccordingly(node, p[i]);
+        }
+
+        return node;
+    }
+
+    private static Node insertAccordingly(Node node, int val) {
+        if(node==null)
+            return new Node(val);
+
+        if(node.data > val)
+            node.left = insertAccordingly(node.left, val);
+        else node.right = insertAccordingly(node.right, val);
+
+        return node;
+    }
+
+    public static List<Integer> nodesAtDistanceK(Node node, Node target, int K) {
+        if(node==null)
+            return new ArrayList<>();
+
+        Map<Node,Node> parentMap = getAllParents(node);
+        Set<Node> visited=new HashSet<>();
+        Queue<Node> queue=new LinkedList<>();
+        queue.offer(target);
+        visited.add(target);
+
+        int currLevel=0;
+        while(!queue.isEmpty()) {
+            int size=queue.size();
+            if (currLevel == K)
+                break;
+            for(int i=0;i<size;i++) {
+                Node pop = queue.poll();
+
+                if (parentMap.get(pop) != null && !visited.contains(parentMap.get(pop))) {
+                    queue.offer(parentMap.get(pop));
+                    visited.add(parentMap.get(pop));
+                }
+                if (pop.left != null && !visited.contains(pop.left)) {
+                    queue.offer(pop.left);
+                    visited.add(pop.left);
+                }
+                if (pop.right != null && !visited.contains(pop.right)) {
+                    queue.offer(pop.right);
+                    visited.add(pop.right);
+                }
+            }
+            currLevel++;
+        }
+
+        List<Integer> result=new ArrayList<>();
+        while(!queue.isEmpty()) {
+            result.add(queue.poll().data);
+        }
+        return result;
+    }
+
+    private static Map<Node, Node> getAllParents(Node node) {
+        if(node==null)
+            return new HashMap<>();
+        Map<Node,Node> map = new HashMap<>();
+        Queue<Node> queue=new LinkedList<>();
+        queue.offer(node);
+        while(!queue.isEmpty()) {
+            Node n = queue.poll();
+            if(n.left!=null) {
+                map.put(n.left, n);
+                queue.offer(n.left);
+            }
+            if(n.right!=null) {
+                map.put(n.right, n);
+                queue.offer(n.right);
+            }
+        }
+        return map;
     }
 }
 
