@@ -36,7 +36,7 @@ public class BinaryTreeTest {
         node1.right.left = new Node(0);
         node1.right.right = new Node(8);
 
-        System.out.println("lca found : "+new BinaryTree().getLCAMedium(node1,0,8));
+//        System.out.println("lca found : "+new BinaryTree().getLCAMedium(node1,0,8));
 
         Node node3=new Node(3);
         node3.left=new Node(5);
@@ -55,8 +55,80 @@ public class BinaryTreeTest {
 //        Node root = constructBSTFromPreOrder(p);
 //        printTree(root);
 
-        constructBSTFromPreOrderTraversal(p);
+//        constructBSTFromPreOrderTraversal(p);
+
+        Node node4 = new Node(1);
+        node4.left=new Node(2);
+        node4.left.left=new Node(4);
+        node4.left.right=new Node(9);
+
+        node4.left.right.right=new Node(3);
+        node4.left.right.right.left=new Node(7);
+        node4.left.right.right.right=new Node(8);
+
+        node4.left.left.left=new Node(6);
+        node4.left.left.right=new Node(5);
+
+        printBoundaryOfTree(node4);
     }
+
+    public static void printBoundaryOfTree(Node node) {
+        if(node==null)
+            return;
+
+        List<Integer> list=new ArrayList<>();
+
+        if(!isLeafNode(node))
+            list.add(node.data);
+
+        printLeftNodes(node.left, list);
+        printLeafNodes(node, list);
+        printRightNodes(node.right, list);
+
+        System.out.println("result: "+list);
+    }
+
+    public static boolean isLeafNode(Node node) {
+        return (node.left == null && node.right == null);
+    }
+    public static void printLeftNodes(Node node, List<Integer> list) {
+        if(node == null || isLeafNode(node))
+            return;
+
+        System.out.println(node.data);
+        list.add(node.data);
+        if(node.left!=null)
+            printLeftNodes(node.left, list);
+        else printLeftNodes(node.right, list);
+    }
+
+    public static void printLeafNodes(Node node, List<Integer> list) {
+        if(node == null)
+            return;
+
+        printLeafNodes(node.left, list);
+        if(isLeafNode(node)) {
+            System.out.println(node.data);
+            list.add(node.data);
+        }
+        printLeafNodes(node.right, list);
+    }
+
+
+    public static void printRightNodes(Node node, List<Integer> list) {
+        if(node == null || isLeafNode(node))
+            return;
+
+        if(node.right!=null)
+            printRightNodes(node.right, list);
+        else printRightNodes(node.left, list);
+
+        System.out.println(node.data);
+        list.add(node.data);
+    }
+
+
+
 
     public static void constructBSTFromPreOrderTraversal(int[] p) {
         Node root = constructAccordingly(null, Integer.MIN_VALUE, Integer.MAX_VALUE, p, new int[]{0});
