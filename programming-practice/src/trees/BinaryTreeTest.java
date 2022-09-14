@@ -2,74 +2,136 @@ package trees;
 
 import java.lang.reflect.Array;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class BinaryTreeTest {
+    public static Queue<Node> q;
+    public static TreeMap<Integer, TreeMap<Integer, PriorityQueue<Integer>>> masterMap;
+
     public static void main(String[] args) {
         BinaryTree tree = new BinaryTree();
-//        tree.addNode(2);
-//        tree.addNode(1);
-//        tree.addNode(5);
-//        tree.addNode(7);
-//        tree.addNode(4);
+////        tree.addNode(2);
+////        tree.addNode(1);
+////        tree.addNode(5);
+////        tree.addNode(7);
+////        tree.addNode(4);
+//
+////        tree.deleteNode(5);
+////        System.out.println(tree);
+////        System.out.println(tree.findElement(7));
+////        tree.performPostOrderTraversal();
+////        tree.performBreadthFirstSearchTraversal();
+//          int[] a = {1,7,5,50,40,10};
+//          Node node = tree.constructBSTFromPostOrder(a, a.length);
+////          System.out.println(node);
+//
+//        int[] inorder = {9,3,15,20,7};
+//        int[] postorder = {9,15,7,20,3};
+//        Node node2 = tree.constructBSTFromInorderAndPostOrder(inorder, postorder, postorder.length);
+////        System.out.println(node2);
+//
+//        Node node1 = new Node(3);
+//        node1.left = new Node(5);
+//        node1.left.left = new Node(6);
+//        node1.left.right = new Node(2);
+//        node1.left.right.left = new Node(7);
+//        node1.left.right.right = new Node(4);
+//        node1.right = new Node(1);
+//        node1.right.left = new Node(0);
+//        node1.right.right = new Node(8);
+//
+////        System.out.println("lca found : "+new BinaryTree().getLCAMedium(node1,0,8));
+//
+//        Node node3=new Node(3);
+//        node3.left=new Node(5);
+//        node3.left.left=new Node(6);
+//        node3.left.right=new Node(2);
+//        node3.left.right.left=new Node(7);
+//        node3.left.right.right=new Node(4);
+//        node3.right=new Node(1);
+//        node3.right.left=new Node(0);
+//        node3.right.right=new Node(8);
+//
+////        System.out.println(nodesAtDistanceK(node3, node3.left, 2));
+//
+//
+//        int[] p = {8,5,1,7,10,12};
+////        Node root = constructBSTFromPreOrder(p);
+////        printTree(root);
+//
+////        constructBSTFromPreOrderTraversal(p);
+//
+//        Node node4 = new Node(1);
+//        node4.left=new Node(2);
+//        node4.left.left=new Node(4);
+//        node4.left.right=new Node(9);
+//
+//        node4.left.right.right=new Node(3);
+//        node4.left.right.right.left=new Node(7);
+//        node4.left.right.right.right=new Node(8);
+//
+//        node4.left.left.left=new Node(6);
+//        node4.left.left.right=new Node(5);
+//
+//        printBoundaryOfTree(node4);
+        masterMap = new TreeMap<>();
 
-//        tree.deleteNode(5);
-//        System.out.println(tree);
-//        System.out.println(tree.findElement(7));
-//        tree.performPostOrderTraversal();
-//        tree.performBreadthFirstSearchTraversal();
-          int[] a = {1,7,5,50,40,10};
-          Node node = tree.constructBSTFromPostOrder(a, a.length);
-//          System.out.println(node);
+        Node node = new Node(1);
+        node.left=new Node(2);
+        node.left.left = new Node(4);
+        node.left.right = new Node(10);
+        node.left.left.right = new Node(5);
+        node.left.left.right.right = new Node(6);
 
-        int[] inorder = {9,3,15,20,7};
-        int[] postorder = {9,15,7,20,3};
-        Node node2 = tree.constructBSTFromInorderAndPostOrder(inorder, postorder, postorder.length);
-//        System.out.println(node2);
+        node.right = new Node(3);
+        node.right.left = new Node(9);
+        node.right.right = new Node(10);
 
-        Node node1 = new Node(3);
-        node1.left = new Node(5);
-        node1.left.left = new Node(6);
-        node1.left.right = new Node(2);
-        node1.left.right.left = new Node(7);
-        node1.left.right.right = new Node(4);
-        node1.right = new Node(1);
-        node1.right.left = new Node(0);
-        node1.right.right = new Node(8);
+        q = new LinkedList<>();
+        q.add(node);
+        levelOrderTraversal(node, 0, 0);
 
-//        System.out.println("lca found : "+new BinaryTree().getLCAMedium(node1,0,8));
+        System.out.println("master map: "+masterMap);
+        List<List<Integer>> list = new ArrayList<>();
 
-        Node node3=new Node(3);
-        node3.left=new Node(5);
-        node3.left.left=new Node(6);
-        node3.left.right=new Node(2);
-        node3.left.right.left=new Node(7);
-        node3.left.right.right=new Node(4);
-        node3.right=new Node(1);
-        node3.right.left=new Node(0);
-        node3.right.right=new Node(8);
+        masterMap.forEach((k, v) -> {
+            List<Integer> tempList = new ArrayList<>();
+            for(Map.Entry<Integer, PriorityQueue<Integer>> entry: v.entrySet()) {
+                tempList.addAll(new ArrayList<>(entry.getValue()));
+            }
+            list.add(tempList);
+        });
 
-//        System.out.println(nodesAtDistanceK(node3, node3.left, 2));
+        System.out.println("actual list: "+list);
 
+    }
 
-        int[] p = {8,5,1,7,10,12};
-//        Node root = constructBSTFromPreOrder(p);
-//        printTree(root);
+    public static void levelOrderTraversal(Node node, int h, int v) {
+        if(node==null)
+            return;
 
-//        constructBSTFromPreOrderTraversal(p);
+        TreeMap<Integer, PriorityQueue<Integer>> map2 = masterMap.getOrDefault(h, new TreeMap<>());
+        PriorityQueue<Integer> pq = map2.getOrDefault(v, new PriorityQueue<>());
+        pq.offer(node.data);
+        map2.put(v, pq);
+        masterMap.put(h, map2);
 
-        Node node4 = new Node(1);
-        node4.left=new Node(2);
-        node4.left.left=new Node(4);
-        node4.left.right=new Node(9);
+        while(!q.isEmpty()) {
+            int size = q.size();
 
-        node4.left.right.right=new Node(3);
-        node4.left.right.right.left=new Node(7);
-        node4.left.right.right.right=new Node(8);
+            for(int i=0;i<size;i++) {
+                Node n = q.poll();
 
-        node4.left.left.left=new Node(6);
-        node4.left.left.right=new Node(5);
-
-        printBoundaryOfTree(node4);
+                if(n.left!=null) {
+                    q.add(n.left);
+                    levelOrderTraversal(node.left, h-1, v+1);
+                }
+                if(n.right!=null) {
+                    q.add(n.right);
+                    levelOrderTraversal(node.right, h+1, v+1);
+                }
+            }
+        }
     }
 
     public static void printBoundaryOfTree(Node node) {
