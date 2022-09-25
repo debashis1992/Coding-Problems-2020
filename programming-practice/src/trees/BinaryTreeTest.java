@@ -8,6 +8,9 @@ public class BinaryTreeTest {
     public static Queue<Node> q;
     public static TreeMap<Integer, TreeMap<Integer, PriorityQueue<Integer>>> masterMap;
 
+
+    public static Map<Integer, Integer> indexMap = new HashMap<>();
+    public static int k=0;
     public static void main(String[] args) {
         BinaryTree tree = new BinaryTree();
 ////        tree.addNode(2);
@@ -104,6 +107,57 @@ public class BinaryTreeTest {
 
         System.out.println("actual list: "+list);
 
+
+        Node result = construct2();
+        System.out.println(result);
+    }
+
+    public static Node construct2() {
+        int[] inorder = {40,20,50,10,60,30};
+        int[] postorder = {40,50,20,60,30,10};
+
+        k = postorder.length-1;
+        for(int i=0;i<inorder.length;i++)
+            indexMap.put(inorder[i], i);
+
+        return construct2(inorder, postorder, 0, postorder.length-1);
+    }
+
+    private static Node construct2(int[] inorder, int[] postorder, int low, int high) {
+        if(low <= high && k>=0) {
+            Node node = new Node(postorder[k]);
+
+            int index = indexMap.get(postorder[k]);
+            k--;
+            node.right = construct2(inorder, postorder, index+1, high);
+            node.left = construct2(inorder, postorder, low, index-1);
+            return node;
+        }
+        return null;
+    }
+
+    public static Node construct() {
+        int[] inorder={40,20,50,10,60,30};
+        int[] preorder={10,20,40,50,30,60};
+
+        k=0;
+        for(int i=0;i<inorder.length;i++)
+            indexMap.put(inorder[i], i);
+
+        return construct(inorder, preorder, 0, preorder.length);
+    }
+
+    private static Node construct(int[] inorder, int[] preorder, int low, int high) {
+        if(low <= high && k < preorder.length) {
+            Node node = new Node(preorder[k]);
+
+            int index = indexMap.get(preorder[k]);
+            k++;
+            node.left = construct(inorder, preorder, low, index-1);
+            node.right = construct(inorder, preorder, index+1, high);
+            return node;
+        }
+        return null;
     }
 
     public static void levelOrderTraversal(Node node, int h, int v) {
