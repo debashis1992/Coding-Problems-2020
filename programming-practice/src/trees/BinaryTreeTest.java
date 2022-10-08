@@ -108,8 +108,43 @@ public class BinaryTreeTest {
         System.out.println("actual list: "+list);
 
 
-        Node result = construct2();
-        System.out.println(result);
+//        Node result = construct2();
+//        System.out.println(result);
+
+        Node root=new Node(1);
+        root.left=new Node(2);
+        root.left.left=new Node(3);
+        root.left.right = new Node(4);
+        root.right=new Node(5);
+
+
+        flatten(root);
+        printNodes(root);
+    }
+
+    private static void printNodes(Node node) {
+        while(node!=null) {
+            System.out.print(node.data + " -> ");
+            node=node.right;
+
+        }
+        System.out.println();
+    }
+
+    public static Node flatten(Node node) {
+        if(node == null)
+            return null;
+
+        Node temp = node;
+        Node rightNode = node.right;
+        node.right = flatten(node.left);
+
+        while(temp!=null && temp.right!=null)
+            temp =  temp.right;
+
+        temp.right = flatten(rightNode);
+        node.left = null;
+        return node;
     }
 
     public static Node construct2() {
