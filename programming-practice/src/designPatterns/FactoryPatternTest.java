@@ -5,6 +5,17 @@ public class FactoryPatternTest {
 
         Tech c = TechFactory.createTech("PC",1);
         Tech l = TechFactory.createTech("LAPTOP",1);
+
+
+    }
+}
+interface Test {
+    static void method1() {
+        System.out.println("static method");
+    }
+
+    default void method2() {
+        System.out.println("default method");
     }
 }
 
