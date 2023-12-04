@@ -30,6 +30,8 @@ class ThreadSafeSingleTon {
     }
 }
 
+//https://javaninja.io/question/how-to-create-thread-safe-singleton-objects-in-java-without-using-synchronized/
+
 class ThreadSafeSingleTonWithoutSynchronized {
     private ThreadSafeSingleTonWithoutSynchronized() {}
 
