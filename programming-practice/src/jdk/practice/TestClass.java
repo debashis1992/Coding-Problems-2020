@@ -1,5 +1,6 @@
 package jdk.practice;
 
+import java.io.Serializable;
 import java.lang.ref.Cleaner;
 
 public class TestClass {
@@ -66,3 +67,21 @@ class Attribute implements AutoCloseable {
 }
 
 
+class MyExc extends Exception {}
+class MyExc2 extends Exception {}
+
+
+
+class C {
+    public void method1() throws Exception {
+
+    }
+}
+
+
+class D implements Serializable {
+    public static final long serialVersionUID = 1L;
+
+    int id;
+    String name;
+}

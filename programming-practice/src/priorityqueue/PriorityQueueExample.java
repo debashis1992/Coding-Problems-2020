@@ -4,25 +4,37 @@ import java.util.*;
 
 public class PriorityQueueExample {
     public static void main(String[] args) {
-        String[] arr = {"ab","ac","ab","c","d","ac","ab"};
-        int k = 2;
-
-//        System.out.println(findTopKElements(arr,k));
-//        PriorityQueue<Integer> pq = new PriorityQueue<>();
-//        pq.offer(1);
-//        pq.offer(2);
-//        pq.offer(3);
-//        pq.offer(4);
-//        pq.offer(5);
+//        String[] arr = {"ab","ac","ab","c","d","ac","ab"};
+//        int k = 2;
 //
-//        while(!pq.isEmpty())
-//            System.out.println(pq.poll());
+////        System.out.println(findTopKElements(arr,k));
+////        PriorityQueue<Integer> pq = new PriorityQueue<>();
+////        pq.offer(1);
+////        pq.offer(2);
+////        pq.offer(3);
+////        pq.offer(4);
+////        pq.offer(5);
+////
+////        while(!pq.isEmpty())
+////            System.out.println(pq.poll());
+//
+//        int[] ar = {3,2,1,5,6,4};
+//        System.out.println(findKthLargestElement(ar,2));
+//
+//        int[] kArr = {6,5,3,2,8,10,9};
+//        System.out.println(Arrays.toString(sortNearlySortedArray(kArr,3)));
 
-        int[] ar = {3,2,1,5,6,4};
-        System.out.println(findKthLargestElement(ar,2));
 
-        int[] kArr = {6,5,3,2,8,10,9};
-        System.out.println(Arrays.toString(sortNearlySortedArray(kArr,3)));
+        PriorityQueue<Integer> pq=new PriorityQueue<>((o1,o2) -> o2-o1);
+        pq.offer(3);
+        pq.offer(2);
+        pq.offer(1);
+        pq.offer(100);
+        pq.offer(1999);
+
+        while(!pq.isEmpty()) {
+            System.out.println(pq.poll());
+        }
 
     }
 

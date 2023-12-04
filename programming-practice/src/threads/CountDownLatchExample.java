@@ -8,13 +8,14 @@ public class CountDownLatchExample {
 
     public static void main(String[] args) {
 
-        int nThreads = 5;
+        int nThreads = 6;
         CountDownLatch countDownLatch = new CountDownLatch(nThreads);
 
-        List<Thread> workerList = new ArrayList<>();
-        for(int i=0;i<nThreads;i++) {
+        for(int i=0;i<nThreads-1;i++) {
             new Thread(new Worker(4, countDownLatch), "thread"+(i+1)).start();
         }
+
+        new Thread(new AnotherWorker(countDownLatch), "another-thread").start();
 
         try {
             countDownLatch.await();
@@ -27,7 +28,26 @@ public class CountDownLatchExample {
 
 }
 
+class AnotherWorker implements  Runnable {
+    CountDownLatch countDownLatch;
+    public AnotherWorker(CountDownLatch count) {
+        this.countDownLatch=count;
+    }
 
+    @Override
+    public void run() {
+        try {
+            Thread.sleep(1000);
+            int d=1/0;
+        }
+         catch (InterruptedException e) {
+            e.printStackTrace();
+         }
+        finally {
+            countDownLatch.countDown();
+        }
+    }
+}
 class Worker implements Runnable {
 
     int lim;
