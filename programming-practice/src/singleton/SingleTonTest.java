@@ -36,7 +36,7 @@ class ThreadSafeSingleTonWithoutSynchronized {
     private ThreadSafeSingleTonWithoutSynchronized() {}
 
     private static final class HoldInstance {
-        private static ThreadSafeSingleTonWithoutSynchronized instance
+        private static final ThreadSafeSingleTonWithoutSynchronized instance
                 = new ThreadSafeSingleTonWithoutSynchronized();
     }
 
