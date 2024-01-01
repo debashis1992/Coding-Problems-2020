@@ -17,6 +17,10 @@ interface Test {
     default void method2() {
         System.out.println("default method");
     }
+
+    private void method3() {
+        System.out.println("private util method");
+    }
 }
 
 enum Type {
