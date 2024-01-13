@@ -15,7 +15,7 @@ public class CountDownLatchExample {
             new Thread(new Worker(4, countDownLatch), "thread"+(i+1)).start();
         }
 
-        new Thread(new AnotherWorker(countDownLatch), "another-thread").start();
+//        new Thread(new AnotherWorker(countDownLatch), "another-thread").start();
 
         try {
             countDownLatch.await();
@@ -38,7 +38,7 @@ class AnotherWorker implements  Runnable {
     public void run() {
         try {
             Thread.sleep(1000);
-            int d=1/0;
+//            int d=1/0;
         }
          catch (InterruptedException e) {
             e.printStackTrace();
