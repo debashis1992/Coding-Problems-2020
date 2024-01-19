@@ -1,4 +1,4 @@
-package designPatterns;
+package designPatterns.builder;
 
 public class BuilderPatternTest {
 

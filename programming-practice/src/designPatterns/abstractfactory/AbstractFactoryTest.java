@@ -1,4 +1,4 @@
-package designPatterns;
+package designPatterns.abstractfactory;
 
 public class AbstractFactoryTest {
     public static void main(String[] args) {
