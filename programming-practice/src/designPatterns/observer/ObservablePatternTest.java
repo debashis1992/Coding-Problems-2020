@@ -39,37 +39,10 @@ public class ObservablePatternTest {
 //        displayObserver.addObserver(rainDisplay);
 //        weatherDataObject.setHumidity(99);
 
-        MessageBoard messageBoard=new MessageBoard();
-        Student s1=new Student();
-        Student s2=new Student();
-        Student s3=new Student();
-
-        messageBoard.addObserver(s1);
-        messageBoard.addObserver(s2);
-        messageBoard.addObserver(s3);
-
-        messageBoard.setMessage("new notification");
-
     }
 }
 
-class MessageBoard extends Observable {
-    String message;
-    public void setMessage(String message) {
-        this.message=message;
 
-        setChanged();
-        notifyObservers();
-    }
-}
-
-class Student implements Observer {
-
-    @Override
-    public void update(Observable o, Object arg) {
-        System.out.println("message board changed");
-    }
-}
 
 
 class WeatherDataObject {
