@@ -5,7 +5,6 @@ import java.util.UUID;
 
 public class User implements Observer {
     String id;
-
     public User() {
         id = UUID.randomUUID().toString();
     }
