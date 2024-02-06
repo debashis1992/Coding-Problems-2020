@@ -5,18 +5,19 @@ import java.util.stream.Collectors;
 
 public class PermutationListTest {
     public static void main(String[] args) {
-        int[] nums = {1,1,2};
-        System.out.println(new PermutationListTest().permute(nums));
+        int[] nums = {1,2,3,4};
+        List<List<Integer>> list = new PermutationListTest().permute(nums);
+
     }
     public List<List<Integer>> permute(int[] nums) {
-        Set<List<Integer>> listOfLists = new HashSet<>();
+        List<List<Integer>> listOfLists = new ArrayList<>();
         int n = nums.length;
 
         permute(nums, 0, n-1, listOfLists);
         return new ArrayList<>(listOfLists);
     }
 
-    public void permute(int[] nums, int l,int r, Set<List<Integer>> list) {
+    public void permute(int[] nums, int l,int r, List<List<Integer>> list) {
         if(l==r)
             list.add(Arrays.stream(nums).boxed().collect(Collectors.toList()));
         else {
