@@ -1,0 +1,8 @@
+package designPatterns.loanlendingapp.enumerations;
+
+public enum ApplicationStates {
+    NEW,
+    CUSTOMER_INFO_ADDED,
+    DOCUMENTS_UPLOADED, DOCUMENTS_VERIFIED, DOCUMENT_VERFICATION_FAILED, LOAN_PROCESSING, LOAN_PROCESSING_FAILED,
+    LOAN_PROCESSED
+}
