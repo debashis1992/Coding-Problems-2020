@@ -11,7 +11,7 @@ public class DocumentsCollectionState implements DriverState {
         try {
             System.out.println("starting documents collection process");
             driver.getApplication().setStatus(DriverOnboardingProcessStates.DOCUMENT_COLLECTION.name()+ CompletionStates._STARTED);
-            int a = 1/0;
+
             uploadDocuments();
             driver.getApplication().setStatus(DriverOnboardingProcessStates.DOCUMENT_COLLECTION.name() + CompletionStates._COMPLETED);
             System.out.println("completed documents collection process");

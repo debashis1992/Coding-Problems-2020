@@ -21,6 +21,9 @@ public class Driver implements ModuleClient {
     public Driver() {
         id = UUID.randomUUID().toString();
         driverState = new SignupApplicationState();
+        // create a new application for the driver
+        application = OnboardingApplication.createNewApplication(this);
+
     }
 
     public DriverState getDriverState() {

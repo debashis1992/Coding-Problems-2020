@@ -15,7 +15,6 @@ public class OnboardingApplication {
         OnboardingApplication application = new OnboardingApplication();
         application.id = UUID.randomUUID().toString();
         application.driver = driver;
-        driver.setApplication(application);
         return application;
     }
 

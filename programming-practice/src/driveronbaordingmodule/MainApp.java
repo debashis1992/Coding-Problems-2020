@@ -6,6 +6,9 @@ import driveronbaordingmodule.model.Driver;
 import driveronbaordingmodule.model.OnboardingApplication;
 import driveronbaordingmodule.service.*;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class MainApp {
@@ -44,9 +47,6 @@ public class MainApp {
         // creating a new application for the driver onboarding process
 
         Driver driver = new Driver();
-
-        // creating a new application for the driver
-        OnboardingApplication application = OnboardingApplication.createNewApplication(driver);
         driverController.addDriver(driver);
         return driver;
     }
