@@ -2,8 +2,8 @@ package driveronbaordingmodule.model;
 
 import driveronbaordingmodule.model.documents.DriverDocuments;
 import driveronbaordingmodule.model.documents.VehicleRegistration;
-import driveronbaordingmodule.service.DriverState;
-import driveronbaordingmodule.service.SignupApplicationState;
+import driveronbaordingmodule.service.state.DriverState;
+import driveronbaordingmodule.service.state.impl.SignupApplicationState;
 
 import java.util.UUID;
 
@@ -29,6 +29,9 @@ public class Driver implements ModuleClient {
         driverState = new SignupApplicationState();
         // create a new application for the driver
         application = OnboardingApplication.createNewApplication(this);
+        this.driverDocuments = new DriverDocuments();
+        this.vehicleRegistration = new VehicleRegistration();
+        this.cityPin = (int)(Math.random() * 100);
 
     }
 
@@ -80,6 +83,9 @@ public class Driver implements ModuleClient {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.driverState = new SignupApplicationState();
+
+        this.driverDocuments = new DriverDocuments();
+        this.vehicleRegistration = new VehicleRegistration();
         this.cityPin = cityPin;
     }
 
@@ -90,5 +96,14 @@ public class Driver implements ModuleClient {
 
     public VehicleRegistration getVehicleRegistration() {
         return vehicleRegistration;
+    }
+
+    @Override
+    public String toString() {
+        return "Driver{" +
+                "id='" + id + '\'' +
+                ", driverState=" + driverState +
+                ", application=" + application +
+                '}';
     }
 }

@@ -1,26 +1,26 @@
-package driveronbaordingmodule.service;
+package driveronbaordingmodule.service.state.impl;
 
 import driveronbaordingmodule.enums.CompletionStates;
 import driveronbaordingmodule.enums.DriverProcessStates;
 import driveronbaordingmodule.exception.DriverStateFailureException;
 import driveronbaordingmodule.model.Driver;
 import driveronbaordingmodule.model.OnboardingApplication;
+import driveronbaordingmodule.service.state.DriverState;
 
 import java.util.Map;
 
-public class SignupApplicationState implements DriverState {
+public class AddProfileInfoState implements DriverState {
     @Override
     public void processApplication(Driver driver) throws DriverStateFailureException {
-        try {
-            System.out.println("Signing up new driver here");
-            OnboardingApplication application = new OnboardingApplication(driver,
-                    DriverProcessStates.SIGN_UP + CompletionStates._STARTED.toString(), null, null);
 
-            application.setStatus(DriverProcessStates.SIGN_UP.name()+CompletionStates._COMPLETED);
-        } catch (RuntimeException e) {
+        try {
+            System.out.println("Adding profile info for driver here");
+            driver.getApplication().setStatus(DriverProcessStates.PROFILE_INFO.name()+CompletionStates._STARTED);
+            driver.getApplication().getApplicationInstances().add(this.getClass());
+        } catch (DriverStateFailureException e) {
             System.out.println("Exception occurred: " + e.getMessage());
             driver.getApplication().setFailedReason(e.getMessage());
-            driver.getApplication().setStatus(DriverProcessStates.SIGN_UP + CompletionStates._FAILED.toString());
+            driver.getApplication().setStatus(DriverProcessStates.PROFILE_INFO.name() + CompletionStates._FAILED.toString());
             throw new DriverStateFailureException(e.getMessage());
         }
     }

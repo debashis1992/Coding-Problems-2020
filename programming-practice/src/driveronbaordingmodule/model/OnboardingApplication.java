@@ -1,5 +1,10 @@
 package driveronbaordingmodule.model;
 
+import driveronbaordingmodule.service.state.DriverState;
+import driveronbaordingmodule.service.state.impl.SignupApplicationState;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class OnboardingApplication {
@@ -7,6 +12,7 @@ public class OnboardingApplication {
     Driver driver;
     String status;
     String failedReason;
+    List<Class<? extends DriverState>> applicationInstances;
 
     private OnboardingApplication() {}
 
@@ -14,6 +20,7 @@ public class OnboardingApplication {
         OnboardingApplication application = new OnboardingApplication();
         application.id = UUID.randomUUID().toString();
         application.driver = driver;
+        application.applicationInstances = new ArrayList<>();
         return application;
     }
 
@@ -22,6 +29,7 @@ public class OnboardingApplication {
         this.driver = driver;
         this.status = status;
         this.failedReason = failedReason;
+        this.driver.setApplication(this);
     }
 
     public void setStatus(String status) {
@@ -30,5 +38,19 @@ public class OnboardingApplication {
 
     public void setFailedReason(String failedReason) {
         this.failedReason = failedReason;
+    }
+
+    public List<Class<? extends DriverState>> getApplicationInstances() {
+        if(applicationInstances == null)
+            applicationInstances = new ArrayList<>();
+        return applicationInstances;
+    }
+
+    @Override
+    public String toString() {
+        return "OnboardingApplication{" +
+                "id='" + id + '\'' +
+                ", applicationInstances=" + applicationInstances +
+                '}';
     }
 }

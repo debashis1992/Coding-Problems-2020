@@ -1,7 +1,8 @@
-package driveronbaordingmodule.service;
+package driveronbaordingmodule.service.state;
 
 import driveronbaordingmodule.exception.DriverStateFailureException;
 import driveronbaordingmodule.model.Driver;
+import driveronbaordingmodule.service.verification.impl.VerificationRules;
 
 import java.util.Map;
 

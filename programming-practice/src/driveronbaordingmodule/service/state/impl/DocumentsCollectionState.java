@@ -1,9 +1,10 @@
-package driveronbaordingmodule.service;
+package driveronbaordingmodule.service.state.impl;
 
 import driveronbaordingmodule.enums.CompletionStates;
 import driveronbaordingmodule.enums.DriverOnboardingProcessStates;
 import driveronbaordingmodule.exception.DriverStateFailureException;
 import driveronbaordingmodule.model.Driver;
+import driveronbaordingmodule.service.state.DriverState;
 
 public class DocumentsCollectionState implements DriverState {
     @Override
@@ -15,6 +16,7 @@ public class DocumentsCollectionState implements DriverState {
             uploadDocuments();
             driver.getApplication().setStatus(DriverOnboardingProcessStates.DOCUMENT_COLLECTION.name() + CompletionStates._COMPLETED);
             System.out.println("completed documents collection process");
+            driver.getApplication().getApplicationInstances().add(this.getClass());
 
         } catch (RuntimeException e) {
             System.out.println("Exception occurred: "+e.getMessage());
@@ -25,7 +27,7 @@ public class DocumentsCollectionState implements DriverState {
     }
 
     public void uploadDocuments() {
-        System.out.println("uploading documents");
+        System.out.println("uploading documents to S3 storage");
     }
 
 }

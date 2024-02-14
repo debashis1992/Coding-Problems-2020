@@ -3,17 +3,21 @@ package driveronbaordingmodule;
 import driveronbaordingmodule.controller.DriverController;
 import driveronbaordingmodule.exception.DriverStateFailureException;
 import driveronbaordingmodule.model.Driver;
-import driveronbaordingmodule.model.OnboardingApplication;
-import driveronbaordingmodule.service.*;
+import driveronbaordingmodule.service.state.impl.*;
+import driveronbaordingmodule.service.state.DriverState;
+import driveronbaordingmodule.service.verification.impl.VerificationRules;
+import driveronbaordingmodule.service.workflow.OnboardingPipelineFlow;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class MainApp {
 
     public static DriverController driverController = new DriverController();
+
+    public static VerificationRules verificationRules = new VerificationRules();
+
+    public static OnboardingPipelineFlow onboardingPipelineFlows = new OnboardingPipelineFlow();
+
     public static void main(String[] args) throws DriverStateFailureException {
 
         // driver adding profile info from collection form
@@ -39,6 +43,10 @@ public class MainApp {
 
         // driver ready to ride
         startReadyToRideState(driver);
+
+        System.out.println("application instances: "+driver.getApplication().getApplicationInstances());
+
+
     }
 
     public static Driver signUp() {
@@ -48,11 +56,13 @@ public class MainApp {
 
         Driver driver = new Driver();
         driverController.addDriver(driver);
+        DriverState state = driver.getDriverState();
+        state.processApplication(driver);
         return driver;
     }
 
     public static void addProfileInfo(Driver driver, Map<String, String> attributes) throws DriverStateFailureException {
-        DriverState state = driver.getDriverState();
+        DriverState state = driver.setAndGetDriverState(new AddProfileInfoState());
         state.processApplication(driver);
         state.updateDriverApplication(driver, attributes);
     }
@@ -64,7 +74,7 @@ public class MainApp {
     }
 
     public static Driver performDocumentsVerificationProcess(Driver driver) throws DriverStateFailureException {
-        DriverState state = driver.setAndGetDriverState(new BackgroundVerificationState());
+        DriverState state = driver.setAndGetDriverState(new BackgroundVerificationState(verificationRules));
         state.processApplication(driver);
         return driver;
     }

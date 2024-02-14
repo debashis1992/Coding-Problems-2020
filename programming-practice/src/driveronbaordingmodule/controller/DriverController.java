@@ -4,6 +4,7 @@ import driveronbaordingmodule.model.Driver;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class DriverController {
 
@@ -27,5 +28,9 @@ public class DriverController {
 
     public boolean searchDriver(Driver driver) {
         return driverDB.containsKey(driver.getId());
+    }
+
+    public Optional<Driver> getDriver(String id) {
+        return Optional.ofNullable(driverDB.get(id));
     }
 }
