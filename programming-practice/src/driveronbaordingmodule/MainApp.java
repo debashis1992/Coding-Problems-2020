@@ -6,7 +6,6 @@ import driveronbaordingmodule.model.Driver;
 import driveronbaordingmodule.service.state.impl.*;
 import driveronbaordingmodule.service.state.DriverState;
 import driveronbaordingmodule.service.verification.impl.VerificationRules;
-import driveronbaordingmodule.service.workflow.OnboardingPipelineFlow;
 
 import java.util.Map;
 
@@ -15,8 +14,6 @@ public class MainApp {
     public static DriverController driverController = new DriverController();
 
     public static VerificationRules verificationRules = new VerificationRules();
-
-    public static OnboardingPipelineFlow onboardingPipelineFlows = new OnboardingPipelineFlow();
 
     public static void main(String[] args) throws DriverStateFailureException {
 
