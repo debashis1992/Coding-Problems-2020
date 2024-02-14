@@ -7,7 +7,6 @@ public class OnboardingApplication {
     Driver driver;
     String status;
     String failedReason;
-    String prevStatus;
 
     private OnboardingApplication() {}
 
@@ -23,7 +22,6 @@ public class OnboardingApplication {
         this.driver = driver;
         this.status = status;
         this.failedReason = failedReason;
-        this.prevStatus = prevStatus;
     }
 
     public void setStatus(String status) {
@@ -33,10 +31,4 @@ public class OnboardingApplication {
     public void setFailedReason(String failedReason) {
         this.failedReason = failedReason;
     }
-
-    public void setPrevStatus(String prevStatus) {
-        this.prevStatus = prevStatus;
-    }
-
-
 }

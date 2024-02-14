@@ -1,5 +1,7 @@
 package driveronbaordingmodule.model;
 
+import driveronbaordingmodule.model.documents.DriverDocuments;
+import driveronbaordingmodule.model.documents.VehicleRegistration;
 import driveronbaordingmodule.service.DriverState;
 import driveronbaordingmodule.service.SignupApplicationState;
 
@@ -10,9 +12,13 @@ public class Driver implements ModuleClient {
     String id;
     String firstName, lastName, email;
     int phoneNumber;
+    int cityPin;
 
     DriverState driverState;
     OnboardingApplication application;
+
+    DriverDocuments driverDocuments;
+    VehicleRegistration vehicleRegistration;
 
     public String getId() {
         return id;
@@ -50,6 +56,14 @@ public class Driver implements ModuleClient {
         this.application = application;
     }
 
+    public int getCityPin() {
+        return cityPin;
+    }
+
+    public void setCityPin(int cityPin) {
+        this.cityPin = cityPin;
+    }
+
     public OnboardingApplication getApplication() {
         return application;
     }
@@ -59,14 +73,22 @@ public class Driver implements ModuleClient {
         return this.driverState;
     }
 
-    public Driver(String firstName, String lastName, String email, int phoneNumber) {
+    public Driver(String firstName, String lastName, String email, int phoneNumber, int cityPin) {
         this.id = UUID.randomUUID().toString();
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.driverState = new SignupApplicationState();
+        this.cityPin = cityPin;
     }
 
 
+    public DriverDocuments getDriverDocuments() {
+        return driverDocuments;
+    }
+
+    public VehicleRegistration getVehicleRegistration() {
+        return vehicleRegistration;
+    }
 }
