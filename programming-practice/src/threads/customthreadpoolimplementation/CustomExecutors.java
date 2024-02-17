@@ -2,9 +2,7 @@ package threads.customthreadpoolimplementation;
 
 public class CustomExecutors {
 
-    public static CustomExecutorService newFixedThreadPoolCustomExecutor(int capacity) {
-
+    public static CustomExecutorService newFixedThreadPoolExecutor(int capacity) {
         return new CustomExecutorService(capacity);
-
     }
 }
