@@ -1,0 +1,15 @@
+
+t
+java:S2142"^Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.(‰†πÄ
+>	java:S108")Either remove or fill this block of code.(‰†πÄ
+t
+java:S2142"^Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.(‰†πÄ
+>	java:S108")Either remove or fill this block of code.(‰†πÄ
+E	java:S106"+Replace this use of System.out by a logger.(ÁﬁŒ◊˚ˇˇˇˇ
+t
+java:S2142+"^Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.(‰†πÄ
+@	java:S106*"+Replace this use of System.out by a logger.(≈áÔù
+F
+java:S2446>"0"notify" may not wake up the appropriate thread.(≠¿Ù…
+P
+java:S2274D":Remove this call to "wait" or move it into a "while" loop.(ûä‰û

@@ -5,6 +5,9 @@ import java.util.*;
 public class TopoSortTest {
     public static void main(String[] args) {
 
+        List<Integer> res=new ArrayList<>();
+        
+
         KahnAlgorithm algorithm=new KahnAlgorithm();
         List<List<Integer>> adjList=new ArrayList<>(
                 List.of(

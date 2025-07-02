@@ -14,5 +14,16 @@ public class AnotherThreadTest {
         t2.start();
         t2.join();
 
+
+    }
+}
+class CheckT implements Runnable {
+    @Override
+    public void run() {
+        try {
+            throw new Exception();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 }

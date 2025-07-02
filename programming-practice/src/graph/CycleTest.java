@@ -5,6 +5,15 @@ import java.util.*;
 public class CycleTest {
     public static void main(String[] args) {
 
+
+        List<String> list=Arrays.asList("hit","hot","dog");
+        char[] ch = {'h','o','t'};
+        String st = String.valueOf(ch);
+        System.out.println(st);
+        System.out.println(list.contains("hot"));
+
+        List<List<String>> anotherList=  new ArrayList<>();
+
         Solution s=new Solution();
         int[][] edges = {{1,2},{2,3},{3,1}};
 //        System.out.println(s.cycleDetection(edges, 3, 3));
@@ -59,7 +68,7 @@ class Solution {
             for(int[] point: points) {
                 int x=point[0]+i;
                 int y=point[1]+j;
-                min=Math.min(min, findNearest0(x,y,r,c,level+1,mat));
+//                min=Math.min(min, findNearest0(x,y,r,c,level+1,mat));
             }
             return min;
         }

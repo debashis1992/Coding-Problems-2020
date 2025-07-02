@@ -1,0 +1,17 @@
+
+R
+java:S4973"<Strings and Boxed types should be compared using "equals()".(—±ÿé
+R
+java:S4973"<Strings and Boxed types should be compared using "equals()".(¨×ùò
+W
+java:S4973"<Strings and Boxed types should be compared using "equals()".(§¯ÄÊüÿÿÿÿ
+W
+java:S4973"<Strings and Boxed types should be compared using "equals()".(šˆÿËÿÿÿÿÿ
+6
+java:S2129" Remove this "String" constructor(ëõŸÅ
+6
+java:S2129	" Remove this "String" constructor(ŸŞ‰
+@	java:S106"+Replace this use of System.out by a logger.(—±ÿé
+@	java:S106"+Replace this use of System.out by a logger.(¨×ùò
+E	java:S106"+Replace this use of System.out by a logger.(§¯ÄÊüÿÿÿÿ
+E	java:S106"+Replace this use of System.out by a logger.(šˆÿËÿÿÿÿÿ
