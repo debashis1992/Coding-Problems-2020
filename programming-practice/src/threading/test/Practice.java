@@ -2,6 +2,7 @@ package threading.test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.*;
 
 public class Practice {
     public volatile int x=5;
@@ -66,8 +67,8 @@ public class Practice {
         Thread producerThread = new Thread(producer, "producer-thread");
         Thread consumerThread = new Thread(consumer, "consumer-thread");
 
-        producerThread.start();
-        consumerThread.start();
+//        producerThread.start();
+//        consumerThread.start();
 
         try {
             producerThread.join();
@@ -76,7 +77,85 @@ public class Practice {
             System.out.println("exception occurred: " + e.getMessage());
         }
 
+        CallableImpl<String> impl = new CallableImpl<>("some value");
+        CallableImpl<Double> impl2 = new CallableImpl<>(112.343);
+        try {
+//            impl.call();
+//            impl2.call();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
+        CallableImpl<Integer> task = new CallableImpl<>(1000);
+        ExecutorService service = Executors.newSingleThreadExecutor();
+
+        Future<Integer> future = service.submit(task);
+        try {
+            Integer res = future.get();
+            System.out.println("got result : " + res);
+            service.shutdown();
+            System.out.println(future.isCancelled());
+            System.out.println(future.isDone());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        CompletableFuture<String> completableFuture = CompletableFuture
+                .supplyAsync(() -> {
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        System.out.println("exception occurred : " + e.getMessage());
+                    }
+
+                    return "hello world!!";
+                });
+
+        completableFuture.join();
+        completableFuture.thenAccept(System.out::println);
+
+        CompletableFuture<Integer> completableFuture1 = CompletableFuture
+                .supplyAsync(() -> 100)
+                .thenApplyAsync(s -> s+2)
+                .thenApplyAsync(s -> s/2);
+
+        completableFuture1.join();
+        completableFuture1.thenAccept(s -> System.out.println("final result : " + s));
+
+
+        CompletableFuture<String> cp1 = CompletableFuture.supplyAsync(() -> "result1");
+        CompletableFuture<String> cp2 = CompletableFuture.supplyAsync(() -> "result2");
+        CompletableFuture<String> cp3 = CompletableFuture.supplyAsync(() -> "result3");
+
+        CompletableFuture<Void> allCp = CompletableFuture.allOf(cp1, cp2, cp3);
+        allCp.thenRun(() -> {
+            String result1 = cp1.join();
+            String result2 = cp2.join();
+            String result3 = cp3.join();
+
+            System.out.println("Final results : " + result1 + ", " + result2 + ", " + result3);
+        });
+
+
+
+    }
+}
+
+class CallableImpl<T> implements Callable<T> {
+    T t;
+    public CallableImpl(T t) {
+        this.t=t;
+    }
+
+    @Override
+    public T call() throws Exception {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            System.out.println("exception occurred: "+ e.getMessage());
+        }
+        System.out.println("calling value: " + t);
+        return t;
     }
 }
 
