@@ -11,7 +11,7 @@ public class Execution implements Runnable {
     @Override
     public void run() {
         while(true) {
-            if(customExecutorService.queue.size()!=0)
+            if(!customExecutorService.queue.isEmpty())
                 customExecutorService.queue.poll().run();
         }
     }

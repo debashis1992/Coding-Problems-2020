@@ -1,4 +1,0 @@
-
-ExecutorService service = Executors.newFixedThreadPoolExecutor(5)
-service.submit(new Task())
-
