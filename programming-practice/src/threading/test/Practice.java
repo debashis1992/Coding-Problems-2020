@@ -3,6 +3,7 @@ package threading.test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Practice {
     public volatile int x=5;
@@ -77,66 +78,81 @@ public class Practice {
             System.out.println("exception occurred: " + e.getMessage());
         }
 
-        CallableImpl<String> impl = new CallableImpl<>("some value");
-        CallableImpl<Double> impl2 = new CallableImpl<>(112.343);
+//        CallableImpl<String> impl = new CallableImpl<>("some value");
+//        CallableImpl<Double> impl2 = new CallableImpl<>(112.343);
+//        try {
+////            impl.call();
+////            impl2.call();
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        CallableImpl<Integer> task = new CallableImpl<>(1000);
+//        ExecutorService service = Executors.newSingleThreadExecutor();
+//
+//        Future<Integer> future = service.submit(task);
+//        try {
+//            Integer res = future.get();
+//            System.out.println("got result : " + res);
+//            service.shutdown();
+//            System.out.println(future.isCancelled());
+//            System.out.println(future.isDone());
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        CompletableFuture<String> completableFuture = CompletableFuture
+//                .supplyAsync(() -> {
+//                    try {
+//                        Thread.sleep(2000);
+//                    } catch (InterruptedException e) {
+//                        System.out.println("exception occurred : " + e.getMessage());
+//                    }
+//
+//                    return "hello world!!";
+//                });
+//
+//        completableFuture.join();
+//        completableFuture.thenAccept(System.out::println);
+//
+//        CompletableFuture<Integer> completableFuture1 = CompletableFuture
+//                .supplyAsync(() -> 100)
+//                .thenApplyAsync(s -> s+2)
+//                .thenApplyAsync(s -> s/2);
+//
+//        completableFuture1.join();
+//        completableFuture1.thenAccept(s -> System.out.println("final result : " + s));
+//
+//
+//        CompletableFuture<String> cp1 = CompletableFuture.supplyAsync(() -> "result1");
+//        CompletableFuture<String> cp2 = CompletableFuture.supplyAsync(() -> "result2");
+//        CompletableFuture<String> cp3 = CompletableFuture.supplyAsync(() -> "result3");
+//
+//        CompletableFuture<Void> allCp = CompletableFuture.allOf(cp1, cp2, cp3);
+//        allCp.thenRun(() -> {
+//            String result1 = cp1.join();
+//            String result2 = cp2.join();
+//            String result3 = cp3.join();
+//
+//            System.out.println("Final results : " + result1 + ", " + result2 + ", " + result3);
+//        });
+
+        BlockingResource blockingResource = new BlockingResource();
+        BetterConsumer betterConsumer = new BetterConsumer(blockingResource);
+        BetterProducer betterProducer = new BetterProducer(blockingResource);
+
+        Thread tP = new Thread(betterProducer, "producer-thread");
+        Thread tC = new Thread(betterConsumer, "consumer-thread");
+
+        tP.start();
+        tC.start();
+
         try {
-//            impl.call();
-//            impl2.call();
-        } catch (Exception e) {
+            tP.join();
+            tC.join();
+        } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
-        CallableImpl<Integer> task = new CallableImpl<>(1000);
-        ExecutorService service = Executors.newSingleThreadExecutor();
-
-        Future<Integer> future = service.submit(task);
-        try {
-            Integer res = future.get();
-            System.out.println("got result : " + res);
-            service.shutdown();
-            System.out.println(future.isCancelled());
-            System.out.println(future.isDone());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        CompletableFuture<String> completableFuture = CompletableFuture
-                .supplyAsync(() -> {
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        System.out.println("exception occurred : " + e.getMessage());
-                    }
-
-                    return "hello world!!";
-                });
-
-        completableFuture.join();
-        completableFuture.thenAccept(System.out::println);
-
-        CompletableFuture<Integer> completableFuture1 = CompletableFuture
-                .supplyAsync(() -> 100)
-                .thenApplyAsync(s -> s+2)
-                .thenApplyAsync(s -> s/2);
-
-        completableFuture1.join();
-        completableFuture1.thenAccept(s -> System.out.println("final result : " + s));
-
-
-        CompletableFuture<String> cp1 = CompletableFuture.supplyAsync(() -> "result1");
-        CompletableFuture<String> cp2 = CompletableFuture.supplyAsync(() -> "result2");
-        CompletableFuture<String> cp3 = CompletableFuture.supplyAsync(() -> "result3");
-
-        CompletableFuture<Void> allCp = CompletableFuture.allOf(cp1, cp2, cp3);
-        allCp.thenRun(() -> {
-            String result1 = cp1.join();
-            String result2 = cp2.join();
-            String result3 = cp3.join();
-
-            System.out.println("Final results : " + result1 + ", " + result2 + ", " + result3);
-        });
-
-
 
     }
 }
@@ -228,4 +244,64 @@ class Resource {
     }
 }
 
+class BlockingResource {
+    private final BlockingQueue<Integer> queue;
+    private int count;
+    public BlockingResource() {
+        queue = new ArrayBlockingQueue<>(1);
+        count = 0;
+    }
+
+    public void add() {
+        while(true) {
+            try {
+                ++count;
+                queue.put(count);
+                System.out.println("added new element :  " + count + ", thread: " + Thread.currentThread());
+                Thread.sleep(1000);
+
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void remove() {
+        while(true) {
+            try {
+                int poll = queue.take();
+                System.out.println("removing element :  " + poll + ", thread: " + Thread.currentThread());
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                System.out.println("exception occurred: " + e.getMessage());
+            }
+        }
+    }
+}
+
+
+class BetterConsumer implements Runnable {
+    private final BlockingResource blockingResource;
+    public BetterConsumer(final BlockingResource blockingResource) {
+        this.blockingResource = blockingResource;
+    }
+
+    @Override
+    public void run() {
+            blockingResource.remove();
+    }
+}
+
+class BetterProducer implements Runnable {
+    private final BlockingResource blockingResource;
+    public BetterProducer(final BlockingResource blockingResource) {
+        this.blockingResource = blockingResource;
+    }
+
+    @Override
+    public void run() {
+
+            blockingResource.add();
+    }
+}
 
