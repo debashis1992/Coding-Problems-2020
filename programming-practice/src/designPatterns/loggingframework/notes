@@ -1,0 +1,23 @@
+log levels - info, debug, warn, error
+
+class LogMessage {
+    Date timstamp;
+    enum level;
+    String message;
+}
+
+logDestination {
+    STDOUT, FILE
+}
+
+mechanism to configure the log level and output destination
+
+concurrent logging should be possible
+
+adding new log levels and output destinations in future
+
+logger.info("adding some content");
+logger.debug("adding some content");
+
+------------
+
