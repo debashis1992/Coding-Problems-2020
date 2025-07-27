@@ -33,13 +33,13 @@ interface LoggingAppender {
 }
 
 class FileAppender implements Appender {
-    public void append(String message) {
+    public synchronized void append(String message) {
         System.out.println("appending to file...["+message+"]");
     }
 }
 
 class StdAppender implements Appender {
-    public void append(String message) {
+    public synchronized void append(String message) {
         System.out.println("appending to standard output...["+message+"]");
     }
 }
