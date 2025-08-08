@@ -24,7 +24,6 @@ public class RespTest {
 interface DispenseHandler {
     void handle(int amount);
     void setNextDispenseHandler(DispenseHandler dispenseHandler);
-    DispenseHandler getNextDispenseHandler();
 }
 
 class DispenseHandlers implements DispenseHandler {
@@ -52,7 +51,7 @@ class DispenseHandlers implements DispenseHandler {
         this.dispenseHandler = dispenseHandler;
     }
 
-    @Override
+//    @Override
     public DispenseHandler getNextDispenseHandler() {
         return dispenseHandler;
     }

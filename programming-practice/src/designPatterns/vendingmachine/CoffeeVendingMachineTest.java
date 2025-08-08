@@ -46,7 +46,6 @@ class Pricing {
     public Double getIngredientPriceFor(String in) {
         return this.ingredientPrice.getOrDefault(in, 0.0);
     }
-
 }
 
 class IngredientsStore {
@@ -154,7 +153,6 @@ class CoffeeVendingMachine {
         // create order
         System.out.println("created order for name: "+name);
         return new CoffeeRecipe(name, totalCost, ingredients);
-
     }
 
     public void dispenseCoffee(CoffeeRecipe coffeeRecipe) {

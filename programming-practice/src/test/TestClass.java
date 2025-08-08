@@ -1,28 +1,34 @@
 package test;
 
+import java.util.Arrays;
+import java.util.Map;
 import java.util.Stack;
 
 public class TestClass {
     public static void main(String[] args) {
-//      String s = "100101";
-//      int count=0;
-//      Stack<Character> stack = new Stack<>();
-//      for(int i=0;i<s.length();i++) {
-//          if(stack.isEmpty()) {
-//              stack.add(s.charAt(i));
-//              continue;
-//          }
-//          while(!stack.isEmpty() && stack.peek().equals(s.charAt(i))) {
-//              stack.pop();
-//              count++;
-//          }
-//          stack.add(s.charAt(i));
-//      }
-//      int res = stack.size()+count;
-//        System.out.println(count);
 
-        System.out.println(getText1("h8"));
+        TestClass t = new TestClass();
 
+    }
+
+    public boolean canJump(int[] nums) {
+
+        // 2 3 1 1 4
+        // i=0, 2
+        return jump(nums, 0);
+    }
+
+    public boolean jump(int[] nums, int i) {
+        if(i>=nums.length-1)
+            return true;
+
+        for(int j=1;j<=nums[i];j++) {
+            if(jump(nums, i+j))
+                return true;
+
+        }
+
+        return false;
     }
 
     public static String getText(String input) {

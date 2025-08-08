@@ -23,7 +23,8 @@ class ThreadSafeSingleTon {
     private static ThreadSafeSingleTon getInstance() {
         if(instance == null) {
             synchronized (ThreadSafeSingleTon.class) {
-                instance = new ThreadSafeSingleTon();
+                if(instance == null)
+                    instance = new ThreadSafeSingleTon();
             }
         }
         return instance;
