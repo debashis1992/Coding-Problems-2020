@@ -1,29 +1,70 @@
 package ratelimiting;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class RateLimitingTest {
     public static void main(String[] args) throws InterruptedException {
-        TokenBucket tokenBucket = new TokenBucket(4);
-        String user1 = "u1";
 
+//        long timestamp = Instant.now().toEpochMilli();
+//        System.out.println(timestamp);
+
+//        TokenBucket tokenBucket = new TokenBucket(6);
+//        String user1 = "u1";
+//
+//        Thread[] threads = new Thread[10];
+//        for(int i=0;i< threads.length;i++) {
+//            threads[i] = new Thread(() -> {
+//                tokenBucket.requestToken(user1);
+//                try {
+//                    Thread.sleep(new Random().nextInt(100) * 1000);
+//                } catch (Exception e) {
+//                    System.out.println("exception occurred: "+e.getMessage());
+//                }
+////                tokenBucket.allocateToken(user1);
+//            }, "thread[" + i + "]");
+//
+//            threads[i].start();
+//        }
+
+
+//        LeakyBucket leakyBucket = new LeakyBucket(5);
+//        Thread[] t1 = new Thread[10];
+//        for(int i=0;i<t1.length;i++) {
+//            t1[i] = new Thread(() -> {
+//                try {
+//                    Thread.sleep(1000);
+//                    leakyBucket.requestToken();
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }, "t1"+i);
+//            t1[i].start();
+//            try {
+//                t1[i].join();
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+
+
+        SlidingWindowLog slidingWindowLog = new SlidingWindowLog(5, 1);
         Thread[] threads = new Thread[10];
-        for(int i=0;i< threads.length;i++) {
+        for(int i=0;i<threads.length;i++) {
             threads[i] = new Thread(() -> {
-                tokenBucket.requestToken(user1);
                 try {
-                    Thread.sleep(new Random().nextInt(100) * 1000);
-                } catch (Exception e) {
+                    Thread.sleep(1000);
+                    slidingWindowLog.requestToken(Instant.now().toEpochMilli());
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
-                tokenBucket.allocateToken(user1);
-            }, "thread[" + i + "]");
-
+            }, "t"+i);
             threads[i].start();
         }
+
+
+
 
     }
 }
@@ -74,5 +115,70 @@ class TokenBucket extends TimerTask {
 
 }
 
+
+class LeakyBucket extends TimerTask {
+    Queue<Date> queue;
+    int size;
+    Timer timer;
+
+    public LeakyBucket(int size) {
+        this.queue = new LinkedList<>();
+        this.size = size;
+        this.timer = new Timer();
+        this.timer.schedule(this, 1000, 1000);
+    }
+
+    @Override
+    public void run() {
+        if(!queue.isEmpty()) {
+            queue.poll();
+        }
+    }
+
+    public synchronized boolean requestToken() {
+        System.out.println("Current thread: "+Thread.currentThread());
+        if (queue.size() == size) {
+            System.out.println("Already queue full.");
+            return false;
+        } else {
+            System.out.println("got token at time: "+new Date().getTime());
+            queue.offer(new Date());
+            return true;
+        }
+
+    }
+}
+
+class SlidingWindowLog {
+    List<Long> timestamps;
+    int size; //5 req
+    int windowSeconds; //per 1 minute window
+    public SlidingWindowLog(int size, int windowSeconds) {
+        this.size=size;
+        timestamps=new ArrayList<>();
+        this.windowSeconds = windowSeconds;
+    }
+
+    public synchronized boolean requestToken(long timestamp) {
+        System.out.println("current thread: "+Thread.currentThread());
+        // min start time for the current time
+        long windowStartTime = timestamp - (windowSeconds * 1000L);
+        Iterator<Long> iterator = timestamps.iterator();
+        while(iterator.hasNext()) {
+            Long start = iterator.next();
+            if(start < windowStartTime)
+                iterator.remove();
+        }
+
+        if(timestamps.size() == size) {
+            System.out.println("no token available, hence rate limiting...");
+            return false;
+        } else {
+            timestamps.add(timestamp);
+            System.out.println("got token successfully....");
+            return true;
+        }
+    }
+}
 
 
