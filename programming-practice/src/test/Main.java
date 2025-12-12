@@ -1,7 +1,6 @@
 package test;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 class Person {
     String name;
@@ -25,6 +24,22 @@ class Engineer extends Person {
 
 public class Main {
     public static void main(String[] args) {
+
+        String s= "the sky     is  blue";
+        System.out.println(Arrays.toString(s.split(" ")));
+
+        List<String> words = Arrays.asList("the","sky","is","blue");
+        List<String> rev = words.reversed();
+
+        System.out.println("words: "+rev);
+
+        Random random = new Random();
+        System.out.println(random.nextInt(10));
+        System.out.println(random.nextInt(10));
+        System.out.println(random.nextInt(10));
+        System.out.println(random.nextInt(10));
+
+        List<Integer> list = Arrays.asList(100,101,102);
 
 
     }

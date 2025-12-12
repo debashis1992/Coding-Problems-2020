@@ -31,7 +31,7 @@ public class Test {
 }
 
 class ConsistentHashing {
-    private TreeMap<Long, String> ring;
+    private final TreeMap<Long, String> ring;
     private final int instances;
     private final MessageDigest md5;
 

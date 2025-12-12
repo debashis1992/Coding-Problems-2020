@@ -181,4 +181,33 @@ class SlidingWindowLog {
     }
 }
 
+class SlidingWindowLog2 {
+    private final int limit; // count of tokens allowed
+    private final long windowSizeInMillis; //window for max tokens
+    private final Deque<Long> timestampLog = new ArrayDeque<>();
+
+    public SlidingWindowLog2(int limit, long windowSizeInMillis) {
+        this.limit = limit;
+        this.windowSizeInMillis = windowSizeInMillis;
+    }
+
+    public synchronized boolean allowRequest() {
+        long now = System.currentTimeMillis();
+
+        while(!timestampLog.isEmpty() && now - timestampLog.peekFirst() > windowSizeInMillis) {
+            timestampLog.pollFirst();
+        }
+
+        if(timestampLog.size() < limit) {
+            timestampLog.addLast(now);
+            return true;
+        }
+        else return false;
+    }
+
+    // 3 tokens in 60sec
+    // (1.00), (1.15), (1.40)
+
+}
+
 

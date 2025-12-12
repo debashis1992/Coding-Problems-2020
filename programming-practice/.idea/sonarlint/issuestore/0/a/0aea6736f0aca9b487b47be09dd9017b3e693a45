@@ -1,0 +1,12 @@
+
+£
+java:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(å¨°›şÿÿÿÿ8¹è™¥õ2
+W
+java:S1854
+":Remove this useless assignment to local variable "animal".(é®’Ä8Éº•¥õ2
+H
+java:S1481
+"+Remove this unused "animal" local variable.(é®’Ä8Íº•¥õ2
+L	java:S106"+Replace this use of System.out by a logger.(Ç™–Ôşÿÿÿÿ8õ…¥õ2
+d
+java:S2094"BRemove this empty class, write its code or make it an "interface".(´ëû¸ùÿÿÿÿ8³Ô”¥õ2

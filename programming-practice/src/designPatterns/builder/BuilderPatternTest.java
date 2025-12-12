@@ -13,10 +13,10 @@ public class BuilderPatternTest {
 }
 
 class Customer {
-    private int id;
-    private String fName;
-    private String lName;
-    private int phone;
+    private final int id;
+    private final String fName;
+    private final String lName;
+    private final int phone;
 
     public Customer(CustomerBuilder builder) {
         this.id= builder.getId();

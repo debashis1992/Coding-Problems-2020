@@ -1,0 +1,16 @@
+/**
+Requirements:-
+
+1) Count errors within a given time period, if the number of errors in the period
+exceeds or reaches a configurable level then the circuit breaker should open.
+2) When the circuit breaker is open, this means that all executions should fail fast.
+3) After a configurable period of time, the circuit breaker should close.
+This means that executions will no longer fail fast.
+**/
+
+class CircuitBreaker {
+    public <T> T execute(Supplier<T> supplier) {
+        // TODO: add circuit breaker functionality
+        return supplier.get();
+    }
+}
