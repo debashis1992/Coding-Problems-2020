@@ -35,15 +35,18 @@ class RealImageProcessor extends ImageProcessor {
 
 class ProxyImageProcessor extends ImageProcessor {
     private final String filename;
-    private RealImageProcessor realImageProcessor;
+    private volatile RealImageProcessor realImageProcessor;
     public ProxyImageProcessor(String filename) {
         this.filename = filename;
     }
 
     @Override
-    public synchronized void display() {
+    public void display() {
         if(realImageProcessor == null) {
-            realImageProcessor = new RealImageProcessor(filename);
+            synchronized (ProxyImageProcessor.class) {
+                if(realImageProcessor == null)
+                    realImageProcessor = new RealImageProcessor(filename);
+            }
         }
         realImageProcessor.display();
     }
