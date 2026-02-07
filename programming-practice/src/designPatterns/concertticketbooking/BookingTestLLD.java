@@ -186,7 +186,7 @@ class SeatRepository implements SeatRepo {
     }
 }
 
-enum BookingStatus { BOOKED, CANCELLED }
+enum BookingStatus { BOOKED, CANCELLED, PARTIAL_BOOKED }
 
 class Booking {
     UUID bookingId;
@@ -254,7 +254,8 @@ class BookingRepository implements BookingRepo {
 
     @Override
     public Set<Booking> viewAllBookings() {
-        return bookingsDb.values();
+//        return bookingsDb.values();
+        return new HashSet<>();
     }
 
     @Override
