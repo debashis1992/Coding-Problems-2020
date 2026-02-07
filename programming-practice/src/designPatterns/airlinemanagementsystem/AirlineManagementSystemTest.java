@@ -1,14 +1,14 @@
 package designPatterns.airlinemanagementsystem;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class AirlineManagementSystemTest {
     public static void main(String[] args) {
+        int[] a={0,10,0};
+        long count = Arrays.stream(a).filter(x -> x==0).count();
+
         FlightBookingAdmin admin = new FlightBookingAdmin();
 
         FlightBookingState state = admin.getFlightBookingState();

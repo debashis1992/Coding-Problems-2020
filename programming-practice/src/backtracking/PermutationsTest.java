@@ -2,7 +2,7 @@ package backtracking;
 
 public class PermutationsTest {
     public static void main(String[] args) {
-        String s = "ABCD";
+        String s = "ABC";
         permute(s, 0, s.length() - 1);
     }
 

@@ -1,5 +1,8 @@
 package designPatterns.linkedin;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -68,15 +71,16 @@ interface Observable {
 interface AcceptReq extends Observer {}
 
 class UserRegistration implements Registration {
-    private static ConcurrentHashMap<String, UserProfile> map;
-    private UserRegistration() {}
+    private ConcurrentHashMap<String, UserProfile> map;
+    private UserRegistration() {
+        map = new ConcurrentHashMap<>();
+    }
     private static volatile UserRegistration instance;
     public static UserRegistration getInstance() {
         if(instance == null) {
             synchronized (UserRegistration.class) {
                 if(instance == null) {
                     instance = new UserRegistration();
-                    map = new ConcurrentHashMap<>();
                 }
             }
         }
@@ -119,7 +123,13 @@ class UserProfile implements Login, Logout, Connection, Observable, AcceptReq {
 
     public UserProfile(String email, String password) {
         this.email=email;
-        this.password=Base64.getEncoder().encode(password.getBytes());
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            this.password = md.digest(password.getBytes(StandardCharsets.UTF_8));
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+//        this.password=Base64.getEncoder().encode(password.getBytes());
         this.isLoggedIn = false;
         loggedInActivity = new CopyOnWriteArrayList<>();
         userDetails = new UserDetails();
