@@ -86,7 +86,8 @@ final class BlockingQueue<T> {
                 }
             }
 
-            T element = t.removeFirst();
+            T element = null;
+//                    t.removeFirst();
             System.out.println("Removing element using thread: "+Thread.currentThread()
                     .getName());
             notifyAll();
