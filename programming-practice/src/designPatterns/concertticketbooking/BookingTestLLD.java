@@ -71,7 +71,7 @@ enum SeatStatus { BOOKED, PENDING, AVAILABLE }
 class Seat {
     final UUID seatId = UUID.randomUUID();
     volatile SeatStatus status;
-    final ReentrantLock lock = new ReentrantLock();
+    final ReentrantLock lock = new ReentrantLock(true);
 
     public Seat(SeatStatus status) {
         this.status = status;

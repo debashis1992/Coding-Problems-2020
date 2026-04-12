@@ -65,7 +65,7 @@ class Que {
         while(true) {
             try {
                 lock.lock();
-                while (list.size() == 0)
+                while (list.isEmpty())
                     emptyCondition.await();
 
                 int el = list.remove(list.size() - 1);

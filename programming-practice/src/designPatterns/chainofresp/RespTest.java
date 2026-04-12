@@ -1,9 +1,6 @@
 package designPatterns.chainofresp;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class RespTest {
 
@@ -18,10 +15,13 @@ public class RespTest {
 
         DispenseHandler finalDispenseHandler = DispenseHandlerFactory.createDispenseHandler(dispenseHandlerList);
         finalDispenseHandler.handle(223);
+
+        dispenseHandlerList.sort(Comparator.comparingInt(DispenseHandler::getCurrency).reversed());
     }
 }
 
 interface DispenseHandler {
+    int getCurrency();
     void handle(int amount);
     void setNextDispenseHandler(DispenseHandler dispenseHandler);
 }
@@ -34,6 +34,10 @@ class DispenseHandlers implements DispenseHandler {
         this.name = name;
     }
     private DispenseHandler dispenseHandler;
+
+    public int getCurrency() {
+        return currency;
+    }
 
     @Override
     public void handle(int amount) {
