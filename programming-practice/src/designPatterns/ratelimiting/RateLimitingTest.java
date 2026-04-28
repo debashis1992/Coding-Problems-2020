@@ -1,5 +1,9 @@
 package designPatterns.ratelimiting;
 
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -143,3 +147,87 @@ class TokenBucketStrategy implements RateLimiterStrategy {
     }
 }
 
+class SlidingWindowProperties {
+    final int WINDOW_SIZE_IN_MILLISECONDS = 60000;
+    final int MAX_TOKEN_COUNT = 5;
+}
+
+class SlidingWindowLog extends SlidingWindowProperties {
+    List<Long> requestLog;
+    final ReentrantLock lock;
+    final String userId;
+
+    public SlidingWindowLog(String userId) {
+        this.requestLog = new ArrayList<>();
+        lock = new ReentrantLock();
+        this.userId = userId;
+    }
+}
+
+interface SlidingWindowLogRepo {
+    SlidingWindowLog findByUserId(String userId);
+    SlidingWindowLog create(String userId);
+}
+
+class SlidingWindowLogRepoImpl implements SlidingWindowLogRepo {
+    ConcurrentHashMap<String, SlidingWindowLog> slidingWindowLogConcurrentHashMap =
+            new ConcurrentHashMap<>();
+
+    @Override
+    public SlidingWindowLog findByUserId(String userId) {
+        return slidingWindowLogConcurrentHashMap.get(userId);
+    }
+
+    @Override
+    public SlidingWindowLog create(String userId) {
+        slidingWindowLogConcurrentHashMap.computeIfAbsent(userId,
+                k -> new SlidingWindowLog(userId));
+
+        return slidingWindowLogConcurrentHashMap.get(userId);
+    }
+}
+
+class SlidingWindowCounterStrategy implements RateLimiterStrategy {
+
+    private final SlidingWindowLogRepo slidingWindowLogRepo;
+
+    public SlidingWindowCounterStrategy(SlidingWindowLogRepo slidingWindowLogRepo) {
+        this.slidingWindowLogRepo = slidingWindowLogRepo;
+    }
+
+    @Override
+    public boolean validate(String userId) throws Exception {
+
+        if(userId == null) throw new IllegalArgumentException("userId cannot be null");
+
+        SlidingWindowLog slidingWindowLog = slidingWindowLogRepo.findByUserId(userId);
+        if(slidingWindowLog == null) {
+            slidingWindowLog = slidingWindowLogRepo.create(userId);
+        }
+
+        ReentrantLock lock = slidingWindowLog.lock;
+        try {
+            lock.lock();
+
+            long now = System.currentTimeMillis();
+            List<Long> requestLogs = slidingWindowLog.requestLog;
+
+            Iterator<Long> it = requestLogs.iterator();
+            while(it.hasNext()) {
+                if(now - it.next() > slidingWindowLog.WINDOW_SIZE_IN_MILLISECONDS) {
+                    it.remove();
+                } else break;
+            }
+            if(requestLogs.size() >= slidingWindowLog.MAX_TOKEN_COUNT) {
+                return false;
+            }
+            requestLogs.add(now);
+
+        } finally {
+            lock.unlock();
+        }
+
+        return true;
+
+    }
+}
