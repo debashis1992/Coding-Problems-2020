@@ -1,6 +1,9 @@
 package designPatterns.observer.notifyme;
 
 import java.util.*;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class NotifyMeTest {
     public static void main(String[] args) {
@@ -14,37 +17,39 @@ public class NotifyMeTest {
         subscriptionManager.subscribe(user2);
         subscriptionManager.subscribe(user3);
 
-        subscriptionManager.update();
+        subscriptionManager.notifyConsumers();
 
         subscriptionManager.unsubscribe(user2);
 
-        subscriptionManager.update();
+        subscriptionManager.notifyConsumers();
 
     }
 }
 
 interface NotifyObservable {
-    boolean subscribe(User user);
-    boolean unsubscribe(User user);
-    void update();
+    boolean subscribe(ButtonObserver user);
+    boolean unsubscribe(ButtonObserver user);
+    void notifyConsumers();
     boolean unsubscribeAll();
 }
 class SubscriptionManager implements NotifyObservable {
-    private final Set<User> subscriptions;
+    private final Set<ButtonObserver> subscriptions;
+    private final ExecutorService service;
     public SubscriptionManager() {
         this.subscriptions = new HashSet<>();
+        service = Executors.newFixedThreadPool(10);
 
     }
 
     @Override
-    public synchronized boolean subscribe(User user) {
+    public synchronized boolean subscribe(ButtonObserver user) {
         if(user!=null)
             return subscriptions.add(user);
         return false;
     }
 
     @Override
-    public synchronized boolean unsubscribe(User user) {
+    public synchronized boolean unsubscribe(ButtonObserver user) {
         if(user!=null)
             return subscriptions.removeIf(u -> u.equals(user));
 
@@ -52,8 +57,13 @@ class SubscriptionManager implements NotifyObservable {
     }
 
     @Override
-    public void update() {
-        subscriptions.forEach(User::update);
+    public void notifyConsumers() {
+        List<ButtonObserver> snapshot;
+        synchronized (this) {
+            snapshot = new ArrayList<>(subscriptions);
+        }
+        snapshot.forEach(sub -> service.submit(sub::update));
+
     }
 
     @Override

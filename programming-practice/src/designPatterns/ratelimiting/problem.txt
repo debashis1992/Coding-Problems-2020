@@ -1,0 +1,28 @@
+Problem statement:
+
+Rate limiter (token bucket/sliding window)
+
+Functional requirements:
+1. userId rate limiting
+2. configurable rate limiting properties
+3. feature flag
+
+
+Non-functional requirements:
+1. scalable
+2. low latency
+3. consistency >> availability in terms of identifying tokens used while rate limiting checks
+
+
+Algorithms:
+1. token bucket - simple to implement, but cannot handle burst of traffic, additional task of filling the buckets
+2. leaky bucket
+3. fixed window - allows multiple reqs to pass within a particular timeframe, not ideal for strict rate limiting
+4. sliding window log - strict rate limiting, but difficult to maintain as we need to check the number of past requests
+we have got in a time range
+5. sliding window counter - strict rate limiting but easy to implement than sliding window log
+
+
+
+
+
