@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class AirlineManagementSystemTest { //TODO
+public class Attempt1 { //TODO
     public static void main(String[] args) {
         int[] a={0,10,0};
         long count = Arrays.stream(a).filter(x -> x==0).count();
