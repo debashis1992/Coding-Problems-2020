@@ -27,13 +27,13 @@ interface DispenseHandler {
 }
 
 class DispenseHandlers implements DispenseHandler {
-    private int currency;
-    private String name;
+    private final int currency;
+    private final String name;
     public DispenseHandlers(int currency, String name) {
         this.currency = currency;
         this.name = name;
     }
-    private DispenseHandler dispenseHandler;
+    private DispenseHandler nextDispenseHandler;
 
     public int getCurrency() {
         return currency;
@@ -46,18 +46,17 @@ class DispenseHandlers implements DispenseHandler {
             amount = amount % currency;
             System.out.println("dispensing notes : "+ notes +" at " + currency);
         }
-        if(dispenseHandler!=null)
-            dispenseHandler.handle(amount);
+        if(nextDispenseHandler !=null)
+            nextDispenseHandler.handle(amount);
     }
 
     @Override
     public void setNextDispenseHandler(DispenseHandler dispenseHandler) {
-        this.dispenseHandler = dispenseHandler;
+        this.nextDispenseHandler = dispenseHandler;
     }
 
-//    @Override
     public DispenseHandler getNextDispenseHandler() {
-        return dispenseHandler;
+        return nextDispenseHandler;
     }
 }
 

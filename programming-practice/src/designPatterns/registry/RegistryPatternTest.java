@@ -79,7 +79,6 @@ class PluginRegistry implements Registry<PluginType,Plugin> {
     public void register(PluginType key, Plugin value) throws PluginAlreadyRegisteredException {
         if(pluginMap.putIfAbsent(key, value)!=null)
             throw new PluginAlreadyRegisteredException("already plugin is registered with key: "+key);
-        pluginMap.put(key, value);
     }
 
     @Override

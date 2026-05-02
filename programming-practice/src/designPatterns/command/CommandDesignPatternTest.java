@@ -86,12 +86,10 @@ class Device {
 
     public final void turnOn() {
         state.turnOn();
-        setState(new TurnOnState());
     }
 
     public final void turnOff() {
         state.turnOff();
-        setState(new TurnOffState());
     }
     public final void updateChannel() {
         state.updateChannel();
