@@ -7,11 +7,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-public class DigiwalletTest {
+public class DigiwalletTest { //TODO
 
     public static void main(String[] args) {
 
-        DigitalWallet wallet = DigitalWallet.getInstance();
+        DigitalWallet wallet = new DigitalWallet();
         wallet.createUser("user1");
         wallet.createUser("user2");
 
@@ -54,21 +54,10 @@ class DigitalWallet implements IDigitalWallet {
     private final ConcurrentHashMap<UUID, String> uuidAccountMap;
     private final CopyOnWriteArraySet<UUID> processedTransactions;
 
-    private static volatile DigitalWallet instance;
-    private DigitalWallet() {
+    public DigitalWallet() {
         accounts = new ConcurrentHashMap<>();
         uuidAccountMap = new ConcurrentHashMap<>();
         processedTransactions = new CopyOnWriteArraySet<>();
-    }
-
-    public static DigitalWallet getInstance() {
-        if(instance == null) {
-            synchronized (DigitalWallet.class) {
-                if(instance == null)
-                    instance = new DigitalWallet();
-            }
-        }
-        return instance;
     }
 
     @Override
@@ -88,6 +77,8 @@ class DigitalWallet implements IDigitalWallet {
             throw new RuntimeException("account with name: "+sourceAccountId+", does not exist!");
         if(!accounts.containsKey(destinationAccountId))
             throw new RuntimeException("account with name: "+destinationAccountId+", does not exist!");
+
+        if(sourceAccountId.equals(destinationAccountId)) throw new RuntimeException("source & destination cannot be same");
 
         Account sourceAccount = accounts.get(sourceAccountId);
         Account destinationAccount = accounts.get(destinationAccountId);
@@ -131,7 +122,9 @@ class DigitalWallet implements IDigitalWallet {
             BigDecimal amount = transaction.getAmount();
 
             String sourceAccountName = uuidAccountMap.get(sourceAccountId), destinationAccountName = uuidAccountMap.get(destinationAccountId);
-            return transferFunds(sourceAccountName, destinationAccountName, amount);
+            transferFunds(sourceAccountName, destinationAccountName, amount);
+            processedTransactions.add(transaction.getId());
+            return true;
         }
         else {
             System.out.println("transaction is already completed");
