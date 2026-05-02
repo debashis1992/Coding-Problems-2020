@@ -2,7 +2,6 @@ package designPatterns.airlinemanagementsystem.airline2;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Attempt2 {
@@ -56,7 +55,6 @@ class BookingException extends RuntimeException {
 interface FlightBooking {
     void selectSeats(int flightId, Set<Integer> seatIds);
     void makePayment(UUID bookingId, Payment payment);
-    void confirmBooking(UUID bookingId);
     void cancelBooking(UUID bookingId);
 }
 
@@ -211,8 +209,7 @@ class FlightBookingService implements FlightBooking {
 
     }
 
-    @Override
-    public void confirmBooking(UUID bookingId) {
+    private void confirmBooking(UUID bookingId) {
         Booking booking = bookingRepo.findByBookingId(bookingId);
         if(booking.bookingStatus == BookingStatus.CONFIRMED) {
             System.out.println("already confirmed");
@@ -220,6 +217,9 @@ class FlightBookingService implements FlightBooking {
         }
         bookingRepo.updatePaymentStatus(bookingId, PaymentStatus.PAID);
         bookingRepo.updateStatus(bookingId, BookingStatus.CONFIRMED);
+        for(int seatId: booking.seatIds) {
+            seatRepo.updateStatus(seatId, SeatStatus.NOT_AVAILABLE);
+        }
     }
 
     @Override
