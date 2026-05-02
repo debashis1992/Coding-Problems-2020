@@ -3,25 +3,26 @@ package designPatterns.decorator;
 public class PizzaBillingSystemTest {
     public static void main(String[] args) {
 
-        Pizza pizza = new PlainPizza();
-        System.out.println(pizza.desc());
+        BasePizza basePizza = new BasePizza();
+        Pizza cheesePizza = new CheeseDecorator(basePizza);
+        System.out.println(cheesePizza.desc());
 
-        pizza = new CheeseDecorator(pizza);
-        System.out.println(pizza.desc());
-        pizza = new ChickenDecorator(pizza);
-        System.out.println(pizza.desc());
+        Pizza chickenPizza = new ChickenDecorator(basePizza);
+        System.out.println(chickenPizza.desc());
+
+        Pizza chickenCheesePizza = new ChickenDecorator(new CheeseDecorator(basePizza));
+        System.out.println(chickenCheesePizza.desc());
     }
 }
-
 interface Pizza {
     String desc();
     double cost();
 }
 
-class PlainPizza implements Pizza {
+class BasePizza implements Pizza {
     @Override
     public String desc() {
-        return "base pizza";
+        return "plain pizza";
     }
 
     @Override
@@ -44,12 +45,12 @@ class CheeseDecorator extends PizzaDecorator {
 
     @Override
     public String desc() {
-        return pizza.desc()+", cheese";
+        return pizza.desc() + ", cheese";
     }
 
     @Override
     public double cost() {
-        return pizza.cost() + 0.22;
+        return pizza.cost() + 1.5;
     }
 }
 
@@ -60,11 +61,11 @@ class ChickenDecorator extends PizzaDecorator {
 
     @Override
     public String desc() {
-        return pizza.desc()+", chicken";
+        return pizza.desc() + ", chicken";
     }
 
     @Override
     public double cost() {
-        return pizza.cost() + 1.55;
+        return pizza.cost() + 2.0;
     }
 }
