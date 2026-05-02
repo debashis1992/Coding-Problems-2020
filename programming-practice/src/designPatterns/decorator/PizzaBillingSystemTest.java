@@ -1,4 +1,4 @@
-package designPatterns.decorator.pizzabillingsystem;
+package designPatterns.decorator;
 
 public class PizzaBillingSystemTest {
     public static void main(String[] args) {
