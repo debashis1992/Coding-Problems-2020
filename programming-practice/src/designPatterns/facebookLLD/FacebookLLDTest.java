@@ -46,7 +46,7 @@ class PostService implements PostRepository {
 
     @Override
     public void save(Post post) {
-        postDB.put(post.postId, post);
+        postDB.putIfAbsent(post.postId, post);
     }
 
     @Override
@@ -100,14 +100,13 @@ class NewsFeedService implements NewsFeed {
 
     @Override
     public void addPost(UUID userId, FeedItem feedItem) {
-        feedsDb.computeIfAbsent(userId, k -> new ConcurrentLinkedDeque<>()).add(feedItem);
+        feedsDb.computeIfAbsent(userId, k -> new ConcurrentLinkedDeque<>()).addFirst(feedItem);
     }
 
     @Override
     public List<FeedItem> getFeed(UUID userId, int limit) {
         return feedsDb.get(userId)
                         .stream()
-                .sorted(Comparator.comparing(f -> f.createdDateTs, Comparator.reverseOrder()))
                 .limit(limit)
                 .toList();
     }
