@@ -22,42 +22,44 @@ public class LRUCacheTest2 {
 }
 
 class LRUCache {
-    private final int capacity;
-    private final Map<Node,Integer> map;
-    private final DoubleLinkedList doubleLinkedList;
+    int capacity;
+    Map<Integer, Node> map;
+    Dll dll;
+
     public LRUCache(int capacity) {
-        this.capacity = capacity;
-        this.map = new HashMap<>();
-        this.doubleLinkedList = new DoubleLinkedList();
+        this.capacity=capacity;
+        map=new HashMap<>();
+        dll=new Dll();
     }
 
-    public synchronized boolean put(Integer key, Integer value) {
-        Node node = new Node(key);
-        if(map.containsKey(node)) {
-            doubleLinkedList.removeNode(node);
-            doubleLinkedList.addNodeToHead(node);
-            map.put(node, value);
-            return true;
-        }
-
-        if(capacity == map.size()) {
-            Node tailNode = doubleLinkedList.removeFromTail();
-            map.remove(tailNode);
-        }
-        doubleLinkedList.addNodeToHead(node);
-        map.put(node, value);
-
-        return true;
-    }
-
-    public synchronized int get(Integer key) {
-        Node node = new Node(key);
-        if(map.containsKey(node)) {
-            doubleLinkedList.removeNode(node);
-            doubleLinkedList.addNodeToHead(node);
-            return map.get(node);
+    public int get(int key) {
+        if(map.containsKey(key)) {
+            Node node = map.get(key);
+            dll.removeNode(node);
+            dll.addToHead(node);
+            return node.val;
         }
         return -1;
+    }
+
+    public void put(int key, int value) {
+        if(map.containsKey(key)) {
+            Node node = map.get(key);
+            dll.removeNode(node);
+            node.val = value;
+            dll.addToHead(node);
+
+        } else {
+            if(map.size() == capacity) {
+                Node node = dll.removeFromTail();
+                map.remove(node.key);
+            }
+
+            Node newNode = new Node(key, value);
+            dll.addToHead(newNode);
+            map.put(key, newNode);
+        }
+
     }
 
     public void view() {
@@ -65,78 +67,64 @@ class LRUCache {
     }
 }
 
-class DoubleLinkedList {
-    Node head;
-    Node tail;
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache obj = new LRUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */
 
-    public DoubleLinkedList() {
-        head = null;
-        tail = null;
+class Dll {
+    Node head, tail;
+    public Dll() {
+        this.head = new Node(-1,-1);
+        this.tail = new Node(-1,-1);
+        head.next = tail;
+        tail.prev = head;
     }
 
-    public void addNodeToHead(Node newNode) {
-        if(head == null && tail == null) {
-            head=newNode;
-            tail=newNode;
-        }
-        else {
-            newNode.next = head;
-            head.prev = newNode;
-            head = newNode;
-        }
-    }
+    public void addToHead(Node node) {
+        if(node==null) return;
 
-    public Node removeFromTail() {
-        Node tailNode = tail;
-        Node newTailNode = tail.prev;
-        newTailNode.next = null;
-        tail = newTailNode;
-        return tailNode;
+        Node nn=head.next;
+        head.next=node;
+        node.prev=head;
+
+        node.next=nn;
+        nn.prev=node;
     }
 
     public void removeNode(Node node) {
-        Node prevNode = node.prev;
-        Node nextNode = node.next;
+        if(node==null) return;
 
-        if(prevNode==null && nextNode==null) {
-            head = null;
-            tail = null;
-        }
-
-        if(prevNode!=null)
-            prevNode.next = nextNode;
-        if(nextNode!=null)
-            nextNode.prev = prevNode;
+        Node pp = node.prev;
+        Node nn = node.next;
+        pp.next = nn;
+        nn.prev = pp;
     }
 
+    public Node removeFromTail() {
+        if(tail.prev == head) return null;
+        Node pp = tail.prev;
+        removeNode(pp);
+        return pp;
+    }
 }
 
 class Node {
-    int val;
-    Node prev, next;
-
-    public Node(int val) {
-        this.val = val;
+    int key,val;
+    Node next, prev;
+    public Node(int key, int val) {
+        this.key=key;
+        this.val=val;
     }
 
     @Override
     public String toString() {
         return "Node{" +
                 "val=" + val +
+                ", key=" + key +
                 '}';
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Node node = (Node) o;
-        return val == node.val;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(val);
-    }
 }
-
 
