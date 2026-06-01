@@ -113,7 +113,7 @@ class TokenBucketStrategy implements RateLimiterStrategy {
     }
 
     @Override
-    public boolean validate(String userId) throws Exception {
+    public boolean validate(String userId) {
         if(userId == null) throw new IllegalArgumentException("userId cannot be null");
 
         Bucket bucket = bucketRepo.findByUserId(userId);

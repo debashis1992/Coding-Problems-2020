@@ -38,7 +38,7 @@ class Codec {
             while(s.charAt(j)!='#')
                 j++;
 
-            int len = Integer.valueOf(s.substring(i,j));
+            int len = Integer.parseInt(s.substring(i,j));
             j++; //skip #
 
             String ns=s.substring(j, j+len);
