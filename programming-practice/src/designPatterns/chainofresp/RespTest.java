@@ -8,10 +8,14 @@ public class RespTest {
 
         DispenseHandler dispenseHandler50 = new DispenseHandlers(50, "fifty");
         DispenseHandler dispenseHandler20 = new DispenseHandlers(20, "twenty");
+        DispenseHandler dispenseHandler5 = new DispenseHandlers(5, "five");
+        DispenseHandler dispenseHandler1 = new DispenseHandlers(1, "one");
 
         List<DispenseHandler> dispenseHandlerList = new ArrayList<>();
         dispenseHandlerList.add(dispenseHandler50);
         dispenseHandlerList.add(dispenseHandler20);
+        dispenseHandlerList.add(dispenseHandler5);
+        dispenseHandlerList.add(dispenseHandler1);
 
         DispenseHandler finalDispenseHandler = DispenseHandlerFactory.createDispenseHandler(dispenseHandlerList);
         finalDispenseHandler.handle(223);

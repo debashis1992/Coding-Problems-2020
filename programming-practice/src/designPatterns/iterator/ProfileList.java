@@ -2,21 +2,20 @@ package designPatterns.iterator;
 
 public class ProfileList implements SocialMediaProfile {
 
-    private Profile head, tail;
+    private Profile tail;
     public ProfileList() {
 
     }
 
     public SocialMediaIterator getIterator() {
-        return new SocialMediaIteratorImpl(head);
+        return new SocialMediaIteratorImpl(tail);
     }
 
 
 
     public void add(String name) {
         Profile p=new Profile(name);
-        if(head==null) {
-            head=p;
+        if(tail==null) {
             tail=p;
         } else {
             tail.next = p;

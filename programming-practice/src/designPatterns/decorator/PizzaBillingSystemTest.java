@@ -31,7 +31,7 @@ class BasePizza implements Pizza {
     }
 }
 
-abstract class PizzaDecorator implements Pizza {
+abstract class PizzaDecorator implements Pizza { //both is-a & has-a, signature of decorator pattern
     protected final Pizza pizza;
     public PizzaDecorator(Pizza pizza) {
         this.pizza=pizza;
