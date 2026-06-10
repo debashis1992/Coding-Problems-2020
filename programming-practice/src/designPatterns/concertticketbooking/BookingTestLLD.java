@@ -30,7 +30,7 @@ enum EventType {
     CONCERT, MOVIE, SHOW
 }
 
-abstract class Event {
+class Event {
     UUID eventId;
     String name, description;
     Date startTs, endTs;
@@ -50,20 +50,6 @@ interface EventRepo {
     Event create(String name, String description, Date start, Date end, AtomicLong capacity, EventType eventType);
     Set<Event> getEvents();
     Set<Event> searchEvents(String name, Date start, Date end, EventType eventType);
-}
-
-class ConcertEvent extends Event {
-    public ConcertEvent(String name, String description, Date startTs, Date endTs, AtomicLong maxCapacity) {
-        super(name, description, startTs, endTs, maxCapacity);
-        eventType = EventType.CONCERT;
-    }
-}
-
-class MovieEvent extends Event {
-    public MovieEvent(String name, String description, Date startTs, Date endTs, AtomicLong maxCapacity) {
-        super(name, description, startTs, endTs, maxCapacity);
-        eventType = EventType.MOVIE;
-    }
 }
 
 enum SeatStatus { BOOKED, PENDING, AVAILABLE }
