@@ -13,27 +13,27 @@ public class BinarySearchTreeTest {
 //        tree.insert(40);
 //        tree.insert(30);
 
-        tree.insert(20);
-        tree.insert(10);
-        tree.insert(30);
-        tree.insert(40);
+//        tree.insert(20);
+//        tree.insert(10);
+//        tree.insert(30);
+//        tree.insert(40);
 
-        tree.inorder();
+//        tree.inorder();
 
-        System.out.println(tree.search(20));
+//        System.out.println(tree.search(20));
 //        tree.remove(20);
 //        tree.inorder();
 //        tree.update(100,50);
-        tree.inorder();
-        System.out.println("height: "+tree.findHeight());
-        tree.levelOrder();
+//        tree.inorder();
+//        System.out.println("height: "+tree.findHeight());
+//        tree.levelOrder();
 
-        int[] ar = {8,2,4,10,7};
-        mergeSort(0, ar.length-1, ar);
-        System.out.println(Arrays.toString(ar));
-        BinaryTree bTree = createBinaryTreeForTest(ar);
-        tree.convertBTtoBST(bTree, ar);
-        bTree.preorder(bTree.root);
+//        int[] ar = {8,2,4,10,7};
+//        mergeSort(0, ar.length-1, ar);
+//        System.out.println(Arrays.toString(ar));
+//        BinaryTree bTree = createBinaryTreeForTest(ar);
+//        tree.convertBTtoBST(bTree, ar);
+//        bTree.preorder(bTree.root);
 
         System.out.println("----------");
         int[] arr = new int[]{-10, -3, 0, 5, 9};
@@ -354,4 +354,6 @@ class Node {
         this.right = null;
     }
 }
+
+
 

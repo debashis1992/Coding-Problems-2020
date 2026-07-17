@@ -2,12 +2,16 @@ package designPatterns.observer.anotherexample;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Product implements Observable {
 
     int count;
+    private ExecutorService service;
     public Product() {
         observerList = new ArrayList<>();
+        service = Executors.newFixedThreadPool(10);
     }
 
     List<Observer> observerList;
@@ -30,7 +34,7 @@ public class Product implements Observable {
 
     @Override
     public void notifyConsumers() {
-        observerList.forEach(ob -> ob.getNotified());
+        observerList.forEach(ob -> service.submit(ob::getNotified));
     }
 }
 
