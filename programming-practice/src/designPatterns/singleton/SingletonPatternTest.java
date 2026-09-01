@@ -22,7 +22,8 @@ class ThreadSafeSingleton {
     public static ThreadSafeSingleton getInstance() {
         if(instance == null) {
             synchronized (ThreadSafeSingleton.class) {
-                instance = new ThreadSafeSingleton();
+                if(instance == null)
+                    instance = new ThreadSafeSingleton();
             }
         }
         return instance;
@@ -34,10 +35,10 @@ class ThreadSafeSingletonWithoutSynchronized {
     private ThreadSafeSingletonWithoutSynchronized() {}
 
     private static class ThreadSafeInstanceHolder {
-        public static ThreadSafeSingletonWithoutSynchronized intance = new ThreadSafeSingletonWithoutSynchronized();
+        public static final ThreadSafeSingletonWithoutSynchronized instance = new ThreadSafeSingletonWithoutSynchronized();
     }
 
     public static ThreadSafeSingletonWithoutSynchronized getInstance() {
-        return ThreadSafeInstanceHolder.intance;
+        return ThreadSafeInstanceHolder.instance;
     }
 }

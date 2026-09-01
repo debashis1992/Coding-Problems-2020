@@ -2,9 +2,25 @@ package designPatterns.airlinemanagementsystem.airline2;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Attempt2 {
+    public static void main(String[] args) {
+        ReentrantLock lock=new ReentrantLock();
+        boolean acquired = false;
+        try {
+            acquired = lock.tryLock(5000, TimeUnit.MILLISECONDS);
+            if(acquired) {
+                System.out.println("do something");
+            }
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if(acquired)
+                lock.unlock();
+        }
+    }
 }
 
 
