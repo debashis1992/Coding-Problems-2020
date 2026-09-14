@@ -7,76 +7,72 @@ package designPatterns.state;
 public class TvStateTest {
     public static void main(String[] args) {
 
-        Tv tv = new Tv("ON");
-        tv.doAction();
+        TvState onState = new TvOnState();
+        TvState offState = new TvOffState();
 
-        tv.setState("OFF");
-        tv.doAction();
+        Tv tv = new Tv();
+//        tv.setState(offState);
 
-        tv.setState("else");
-        tv.doAction();
-        System.out.println("---------");
+        tv.off();
+        tv.on();
 
-        TvOnState onState = new TvOnState();
-        TvOffState offState = new TvOffState();
-
-        TvWithState tv2 = new TvWithState(onState);
-        tv2.getAction();
-
-        tv2.setState(offState);
-        tv2.getAction();
-
+//        tv.setState(onState);
+        tv.on();
+        tv.off();
     }
 }
 
-interface State {
-    void doAction();
+interface TvState {
+    void turnOn();
+    void turnOff();
 }
 
-class TvOnState implements State {
+class TvOnState implements TvState {
     @Override
-    public void doAction() {
-        System.out.println("tv is turned on");
+    public void turnOn() {
+        System.out.println("tv already in on state");
     }
-}
 
-class TvOffState implements State {
     @Override
-    public void doAction() {
-        System.out.println("tv is turned off");
+    public void turnOff() {
+        System.out.println("tv turned off");
     }
 }
 
-class TvWithState {
-    State state;
-    public TvWithState(State state) {
-        this.state=state;
+class TvOffState implements TvState {
+    @Override
+    public void turnOn() {
+        System.out.println("tv turned on");
     }
 
-    public void setState(State state) {
-        this.state = state;
-    }
-
-    public void getAction() {
-        state.doAction();
+    @Override
+    public void turnOff() {
+        System.out.println("tv already turned off");
     }
 }
 
 class Tv {
-    private String state;
+    public Tv() {
+        this.state = new TvOffState();
+    }
 
-    public void setState(String state) {
+    TvState state;
+
+    public TvState getState() {
+        return state;
+    }
+
+    public void setState(TvState state) {
         this.state = state;
     }
 
-    public Tv(String state) {
-        this.state=state;
+    void on() {
+        state.turnOn();
+        state = new TvOnState();
     }
-    public void doAction() {
-        if(state.equals("ON"))
-            System.out.println("tv is turned on");
-        else if(state.equals("OFF"))
-            System.out.println("tv is turned off");
-        else System.out.println("unknown state");
+
+    void off() {
+        state.turnOff();
+        state = new TvOffState();
     }
 }

@@ -1,5 +1,8 @@
 package test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ProgramTest {
     public static void main(String[] args) {
 
@@ -9,7 +12,24 @@ public class ProgramTest {
 
         String s = "aabbbbbccc";
         ProgramTest t=new ProgramTest();
-        t.compress(s.toCharArray());
+//        t.compress(s.toCharArray());
+
+
+        List<Character> decodedString = new ArrayList<>();
+        decodedString.add('a');
+        decodedString.add('b');
+
+        List<Character> mod=new ArrayList<>();
+        mod.addAll(decodedString);
+        mod.addAll(decodedString);
+
+        System.out.println(mod);
+
+        StringBuilder stringBuilder=new StringBuilder();
+        stringBuilder.append("ab");
+        stringBuilder = stringBuilder.repeat(stringBuilder, 1);
+
+        System.out.println(stringBuilder);
     }
 
     public int compress(char[] chars) {
