@@ -7,8 +7,10 @@ import java.util.concurrent.RecursiveTask;
 public class ForkJoinPoolTest {
     public static void main(String[] args) {
 
+        ForkJoinPool pool2 = new ForkJoinPool(4);
+
         ForkJoinPool pool = ForkJoinPool.commonPool();
-        SumTask task = new SumTask(1, 100);
+        SumTask task = new SumTask(1, 1000000);
 
         Long result = pool.invoke(task);
         System.out.println("Result: "+result);
@@ -67,9 +69,9 @@ class SumTask extends RecursiveTask<Long> {
             SumTask leftTask = new SumTask(low, mid);
             SumTask rightTask = new SumTask(mid+1, high);
 
-            leftTask.fork();
+            leftTask.fork(); //start async process
             Long rightResult = rightTask.compute();
-            Long leftResult = leftTask.join();
+            Long leftResult = leftTask.join(); //wait for the result
 
             return leftResult+rightResult;
         }

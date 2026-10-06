@@ -7,8 +7,8 @@ public class ProducerConsumerUsingBQ {
     public static void main(String[] args) {
 
         BQ bq = new BQ();
-        Producer p = new Producer("producer-thread", bq);
-        Consumer c = new Consumer("consumer-thread", bq);
+        Thread p = new Thread(new Producer(bq), "producer-thread");
+        Thread c = new Thread(new Consumer(bq), "consumer-thread");
 
         p.start();
         c.start();
@@ -22,10 +22,9 @@ public class ProducerConsumerUsingBQ {
     }
 }
 
-class Producer extends Thread {
+class Producer implements Runnable {
     BQ bq;
-    public Producer(String name, BQ bq) {
-        super(name);
+    public Producer(BQ bq) {
         this.bq = bq;
     }
 
@@ -33,12 +32,12 @@ class Producer extends Thread {
     public void run() {
         bq.add();
     }
+
 }
 
-class Consumer extends Thread {
+class Consumer implements Runnable {
     BQ bq;
-    public Consumer(String name, BQ bq) {
-        super(name);
+    public Consumer(BQ bq) {
         this.bq = bq;
     }
 
